@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/locale_provider.dart';
+import 'package:snuz_app/screens/sleepcast_player_screen.dart';
 
 class SleepcastItem extends StatelessWidget {
   const SleepcastItem({
@@ -25,7 +26,12 @@ class SleepcastItem extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(sleepcast: cast)),
+            );
+          },
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(16.0),

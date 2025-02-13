@@ -74,6 +74,7 @@ class OverviewScreen extends StatelessWidget {
                           SleepcastItem(cast: cast),
                           const SizedBox(height: 16),
                         ],
+                        const SizedBox(height: 32),
                         Text(l10n.sos, style: Theme.of(context).textTheme.headlineMedium),
                         const SizedBox(height: 16),
                         for (final cast in sleepcastProvider.sleepcastSOS) ...[
