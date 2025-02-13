@@ -1,4 +1,7 @@
 {
     "appTitle": "Snuz App",
-    "helloWorld": "Hello World!"
+    "goodEvening": "Good evening,",
+    "dreamJourneyQuestion": "what dream journey would you like to embark on today?",
+    "sleepcasts": "Sleepcasts",
+    "sos": "SOS"
 }

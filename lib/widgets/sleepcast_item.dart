@@ -36,7 +36,7 @@ class SleepcastItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      locale == 'de' ? cast.title_de : cast.title,
+                      locale == 'de' ? cast.titleDe : cast.title,
                       style: textTheme.titleLarge,
                     ),
                     Container(
@@ -54,7 +54,7 @@ class SleepcastItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  locale == 'de' ? cast.description_de : cast.description,
+                  locale == 'de' ? cast.descriptionDe : cast.description,
                   style: textTheme.bodyMedium,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

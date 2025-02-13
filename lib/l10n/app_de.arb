@@ -1,4 +1,7 @@
 {
     "appTitle": "Snuz App",
-    "helloWorld": "Hallo Welt!"
+    "goodEvening": "Guten Abend,",
+    "dreamJourneyQuestion": "auf welche Traumreise möchtest du dich heute begeben?",
+    "sleepcasts": "Sleepcasts",
+    "sos": "SOS"
 }
