@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/locale_provider.dart';
+import 'package:snuz_app/providers/audio_player_provider.dart';
 
 class SleepcastPlayerScreen extends StatefulWidget {
   const SleepcastPlayerScreen({
@@ -19,13 +18,17 @@ class SleepcastPlayerScreen extends StatefulWidget {
 }
 
 class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
-  bool isPlaying = false;
-  double progress = 0.0;
+  @override
+  void deactivate() {
+    super.deactivate();
+    context.read<AudioPlayerProvider>().pause();
+  }
 
   @override
   Widget build(BuildContext context) {
     final locale = context.watch<LocaleProvider>().locale.languageCode;
     final textTheme = Theme.of(context).textTheme;
+    final audioPlayer = context.watch<AudioPlayerProvider>();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -45,7 +48,7 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
             'assets/animations/background_player.json',
             fit: BoxFit.fill,
             repeat: true,
-            animate: isPlaying,
+            animate: audioPlayer.isPlaying,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 24),
@@ -70,11 +73,17 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => setState(() => isPlaying = !isPlaying),
+                  onTap: () {
+                    if (audioPlayer.isPlaying) {
+                      audioPlayer.pause();
+                    } else {
+                      audioPlayer.resume();
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(32),
                     child: Icon(
-                      isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                      audioPlayer.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                       color: textTheme.headlineLarge?.color,
                       size: 48,
                     ),
@@ -85,7 +94,7 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       PlayerProgressBar(
-                        progress: progress,
+                        progress: audioPlayer.progress,
                         duration: widget.sleepcast.duration,
                       ),
                     ],
