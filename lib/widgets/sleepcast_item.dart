@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
@@ -48,10 +49,14 @@ class _SleepcastItemState extends State<SleepcastItem> {
                     setState(() => isLoading = true);
                     await sleepcastProvider.downloadSleepcast(widget.cast, locale);
                     final path = sleepcastProvider.getSleepcastPath(widget.cast.id, locale);
-                    await audioPlayerProvider.openSleepcast(widget.cast, path);
+                    await audioPlayerProvider.openSleepcast(widget.cast, path, locale);
                     Wiredash.trackEvent(
                       'open_sleepcast',
-                      data: {'id': widget.cast.id, 'title': widget.cast.title, 'locale': locale},
+                      data: {
+                        'id': widget.cast.id,
+                        'title': Sleepcasts.getTitle(widget.cast.id, locale),
+                        'locale': locale
+                      },
                     );
                     if (!context.mounted) return;
                     Navigator.push(
@@ -69,11 +74,9 @@ class _SleepcastItemState extends State<SleepcastItem> {
                   Row(
                     children: [
                       Text(
-                        (isLoading
+                        isLoading
                             ? '${l10n.isLoading} ${((sleepcastProvider.loadingSleepcasts.entries.firstOrNull?.value ?? 0) * 100).toStringAsFixed(0)}%'
-                            : locale == 'de'
-                                ? widget.cast.titleDe
-                                : widget.cast.title),
+                            : Sleepcasts.getTitle(widget.cast.id, locale),
                         style: textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -102,7 +105,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    locale == 'de' ? widget.cast.descriptionDe : widget.cast.description,
+                    Sleepcasts.getDescription(widget.cast.id, locale),
                     style: textTheme.bodyMedium,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

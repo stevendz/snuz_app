@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/foundation.dart';
+import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -40,19 +41,19 @@ class AudioPlayerProvider with ChangeNotifier {
   Duration get duration => _duration;
   double get progress => duration.inSeconds > 0 ? position.inSeconds / duration.inSeconds : 0.0;
 
-  Future<void> openSleepcast(Sleepcast cast, String path) async {
+  Future<void> openSleepcast(Sleepcast cast, String path, String locale) async {
     try {
       await _player.open(
         Audio.file(
           path,
           metas: Metas(
             id: cast.id,
-            title: cast.title,
+            title: Sleepcasts.getTitle(cast.id, locale),
             artist: "Snuz",
             album: "Snuz Sleepcasts",
             extra: {
-              'titleDe': cast.titleDe,
-              'descriptionDe': cast.descriptionDe,
+              'title': Sleepcasts.getTitle(cast.id, locale),
+              'description': Sleepcasts.getDescription(cast.id, locale),
             },
           ),
         ),
@@ -71,7 +72,7 @@ class AudioPlayerProvider with ChangeNotifier {
     } catch (e) {
       Wiredash.trackEvent(
         'error_opening_sleepcast',
-        data: {'id': cast.id, 'title': cast.title},
+        data: {'id': cast.id, 'title': Sleepcasts.getTitle(cast.id, locale)},
       );
     }
   }

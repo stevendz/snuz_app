@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
@@ -59,13 +60,13 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        locale == 'de' ? widget.sleepcast.titleDe : widget.sleepcast.title,
+                        Sleepcasts.getTitle(widget.sleepcast.id, locale),
                         style: textTheme.headlineLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        locale == 'de' ? widget.sleepcast.descriptionDe : widget.sleepcast.description,
+                        Sleepcasts.getDescription(widget.sleepcast.id, locale),
                         style: textTheme.bodyLarge,
                         textAlign: TextAlign.center,
                       ),
