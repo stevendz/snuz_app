@@ -18,7 +18,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()..initLocale()),
-        ChangeNotifierProvider(create: (_) => SleepcastProvider()),
+        ChangeNotifierProvider(create: (_) => SleepcastProvider()..init()),
         ChangeNotifierProvider(create: (_) => AudioPlayerProvider()),
       ],
       child: const MyApp(),
@@ -73,6 +73,6 @@ final theme = ThemeData(
     bodySmall: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8)),
     labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white.withOpacity(0.7)),
     labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white.withOpacity(0.7)),
-    labelSmall: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white.withOpacity(0.7)),
+    labelSmall: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white.withOpacity(0.5)),
   ),
 );

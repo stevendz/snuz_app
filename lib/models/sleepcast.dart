@@ -5,7 +5,7 @@ class Sleepcast {
   final String titleDe;
   final String descriptionDe;
   final Duration duration;
-  final String audioUrl;
+  final List<String> locale;
 
   Sleepcast({
     required this.id,
@@ -14,7 +14,7 @@ class Sleepcast {
     required this.titleDe,
     required this.descriptionDe,
     required this.duration,
-    required this.audioUrl,
+    required this.locale,
   });
 
   factory Sleepcast.fromJson(Map<String, dynamic> json) {
@@ -25,7 +25,7 @@ class Sleepcast {
       titleDe: json['title_de'] as String,
       descriptionDe: json['description_de'] as String,
       duration: Duration(seconds: json['duration'] as int),
-      audioUrl: json['audio_url'] as String,
+      locale: json['locale'] as List<String>,
     );
   }
 
@@ -37,7 +37,7 @@ class Sleepcast {
       'title_de': titleDe,
       'description_de': descriptionDe,
       'duration': duration.inSeconds,
-      'audio_url': audioUrl,
+      'locale': locale,
     };
   }
 
@@ -48,7 +48,7 @@ class Sleepcast {
     String? titleDe,
     String? descriptionDe,
     Duration? duration,
-    String? audioUrl,
+    List<String>? locale,
   }) {
     return Sleepcast(
       id: id ?? this.id,
@@ -57,7 +57,7 @@ class Sleepcast {
       titleDe: titleDe ?? this.titleDe,
       descriptionDe: descriptionDe ?? this.descriptionDe,
       duration: duration ?? this.duration,
-      audioUrl: audioUrl ?? this.audioUrl,
+      locale: locale ?? this.locale,
     );
   }
 }

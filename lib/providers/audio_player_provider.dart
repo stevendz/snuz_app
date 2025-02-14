@@ -29,10 +29,10 @@ class AudioPlayerProvider with ChangeNotifier {
       notifyListeners();
     });
 
-    _player.playlistAudioFinished.listen((Playing playing) {
-      _player.seek(Duration.zero);
-      _player.pause();
-    });
+    // _player.playlistAudioFinished.listen((Playing playing) {
+    //   _player.seek(Duration.zero);
+    //   _player.pause();
+    // });
   }
 
   bool get isPlaying => _isPlaying;
@@ -40,11 +40,11 @@ class AudioPlayerProvider with ChangeNotifier {
   Duration get duration => _duration;
   double get progress => duration.inSeconds > 0 ? position.inSeconds / duration.inSeconds : 0.0;
 
-  Future<void> openSleepcast(Sleepcast cast) async {
+  Future<void> openSleepcast(Sleepcast cast, String path) async {
     try {
       await _player.open(
-        Audio(
-          cast.audioUrl,
+        Audio.file(
+          path,
           metas: Metas(
             id: cast.id,
             title: cast.title,

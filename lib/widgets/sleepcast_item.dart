@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/models/sleepcast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
 import 'package:snuz_app/providers/locale_provider.dart';
+import 'package:snuz_app/providers/sleepcast_provider.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -22,8 +24,12 @@ class _SleepcastItemState extends State<SleepcastItem> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final sleepcastProvider = context.watch<SleepcastProvider>();
+    final audioPlayerProvider = context.watch<AudioPlayerProvider>();
     final textTheme = Theme.of(context).textTheme;
     final locale = context.watch<LocaleProvider>().locale.languageCode;
+    final l10n = AppLocalizations.of(context)!;
+    final isDownloaded = sleepcastProvider.isDownloaded(widget.cast.id, locale);
     return Opacity(
       opacity: isLoading ? 0.5 : 1,
       child: Container(
@@ -36,18 +42,24 @@ class _SleepcastItemState extends State<SleepcastItem> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () async {
-              await context.read<AudioPlayerProvider>().openSleepcast(widget.cast);
-              Wiredash.trackEvent(
-                'open_sleepcast',
-                data: {'id': widget.cast.id, 'title': widget.cast.title, 'locale': locale},
-              );
-              if (!context.mounted) return;
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(sleepcast: widget.cast)),
-              );
-            },
+            onTap: isLoading || sleepcastProvider.loadingSleepcasts.isNotEmpty
+                ? null
+                : () async {
+                    setState(() => isLoading = true);
+                    await sleepcastProvider.downloadSleepcast(widget.cast, locale);
+                    final path = sleepcastProvider.getSleepcastPath(widget.cast.id, locale);
+                    await audioPlayerProvider.openSleepcast(widget.cast, path);
+                    Wiredash.trackEvent(
+                      'open_sleepcast',
+                      data: {'id': widget.cast.id, 'title': widget.cast.title, 'locale': locale},
+                    );
+                    if (!context.mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(sleepcast: widget.cast)),
+                    );
+                    setState(() => isLoading = false);
+                  },
             borderRadius: BorderRadius.circular(12),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -55,17 +67,31 @@ class _SleepcastItemState extends State<SleepcastItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        locale == 'de' ? widget.cast.titleDe : widget.cast.title,
+                        (isLoading
+                            ? '${l10n.isLoading} ${((sleepcastProvider.loadingSleepcasts.entries.firstOrNull?.value ?? 0) * 100).toStringAsFixed(0)}%'
+                            : locale == 'de'
+                                ? widget.cast.titleDe
+                                : widget.cast.title),
                         style: textTheme.titleLarge,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                      const Spacer(),
+                      if (isDownloaded)
+                        Icon(
+                          Icons.download_done_rounded,
+                          color: textTheme.bodyMedium?.color?.withOpacity(1),
+                          size: 20,
+                        )
+                      else
+                        Icon(
+                          Icons.cloud_download_outlined,
+                          color: textTheme.bodyMedium?.color?.withOpacity(0.15),
+                          size: 20,
                         ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),

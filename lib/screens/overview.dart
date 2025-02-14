@@ -51,14 +51,8 @@ class OverviewScreen extends StatelessWidget {
                               ),
                               onSelected: (locale) => context.read<LocaleProvider>().setLocale(locale),
                               itemBuilder: (BuildContext context) => const [
-                                PopupMenuItem(
-                                  value: Locale('en', ''),
-                                  child: Text('English'),
-                                ),
-                                PopupMenuItem(
-                                  value: Locale('de', ''),
-                                  child: Text('Deutsch'),
-                                ),
+                                PopupMenuItem(value: Locale('en', ''), child: Text('English')),
+                                PopupMenuItem(value: Locale('de', ''), child: Text('Deutsch')),
                               ],
                             ),
                           ],

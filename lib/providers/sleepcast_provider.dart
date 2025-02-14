@@ -1,15 +1,71 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:snuz_app/models/sleepcast.dart';
+import 'package:snuz_app/utils/r2_service.dart';
 
 class SleepcastProvider with ChangeNotifier {
+  late String _downloadDirectoryPath;
   final List<Sleepcast> _sleepcastStory = [];
   final List<Sleepcast> _sleepcastSOS = [];
 
   List<Sleepcast> get sleepcastStory => _sleepcastStory;
   List<Sleepcast> get sleepcastSOS => _sleepcastSOS;
 
-  SleepcastProvider() {
+  Map<String, double> loadingSleepcasts = {};
+
+  Future<void> init() async {
+    await _setDownloadDirectory();
     _initializeDummyData();
+  }
+
+  Future<void> _setDownloadDirectory() async {
+    if (Platform.isIOS) {
+      _downloadDirectoryPath = '${(await getApplicationSupportDirectory()).path}/';
+    } else if (Platform.isAndroid) {
+      _downloadDirectoryPath = '${(await getApplicationDocumentsDirectory()).path}/';
+    }
+  }
+
+  String getSleepcastPath(String id, String locale) {
+    return '$_downloadDirectoryPath/sleepcasts/$id/$locale.mp3';
+  }
+
+  bool isDownloaded(String id, String locale) {
+    return File('$_downloadDirectoryPath/sleepcasts/$id/$locale.mp3').existsSync();
+  }
+
+  Future<Sleepcast?> downloadSleepcast(Sleepcast cast, String locale) async {
+    if (isDownloaded(cast.id, locale)) return cast;
+
+    loadingSleepcasts[cast.id] = 0;
+    notifyListeners();
+    try {
+      final R2Service service = R2Service();
+      final url = await service.getPresignedUrl(key: 'sleepcasts/$locale.mp3', expiration: const Duration(hours: 1));
+      final savePath = '$_downloadDirectoryPath/sleepcasts/${cast.id}/$locale.mp3';
+      final resp = await Dio().download(url, savePath, onReceiveProgress: (received, total) {
+        loadingSleepcasts[cast.id] = received / total;
+        notifyListeners();
+      });
+      if (resp.statusCode == 200) {
+        loadingSleepcasts.remove(cast.id);
+        notifyListeners();
+      }
+      return cast;
+    } catch (e) {
+      log(e.toString());
+      // Wiredash.trackEvent(
+      //   'Error loading sleepcast',
+      //   data: {'id': cast.id, 'error': e.toString()},
+      // );
+      loadingSleepcasts.remove(cast.id);
+      notifyListeners();
+      return null;
+    }
   }
 
   void _initializeDummyData() {
@@ -22,7 +78,7 @@ class SleepcastProvider with ChangeNotifier {
         descriptionDe:
             'Ein entspannender Spaziergang durch einen friedlichen Wald, begleitet vom sanften Rascheln der Blätter.',
         duration: const Duration(minutes: 20),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
       Sleepcast(
         id: 'story_2',
@@ -31,7 +87,7 @@ class SleepcastProvider with ChangeNotifier {
         titleDe: 'Meeresrauschen',
         descriptionDe: 'Lausche den beruhigenden Wellen des Ozeans an einem einsamen Strand.',
         duration: const Duration(minutes: 15),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
       Sleepcast(
         id: 'story_3',
@@ -41,7 +97,7 @@ class SleepcastProvider with ChangeNotifier {
         descriptionDe:
             'Ein gemütlicher Abend zuhause, während draußen ein sanfter Sommerregen gegen das Fenster prasselt.',
         duration: const Duration(minutes: 25),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
       Sleepcast(
         id: 'story_4',
@@ -50,7 +106,7 @@ class SleepcastProvider with ChangeNotifier {
         titleDe: 'Bergwanderung',
         descriptionDe: 'Eine friedvolle Wanderung durch die majestätischen Berge mit atemberaubenden Ausblicken.',
         duration: const Duration(minutes: 18),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
     ]);
 
@@ -64,7 +120,7 @@ class SleepcastProvider with ChangeNotifier {
         descriptionDe:
             'Eine geführte Entspannung mit sanften Atemübungen und Visualisierungen zur schnellen Schmerzlinderung.',
         duration: const Duration(minutes: 8),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
       Sleepcast(
         id: 'sos_2',
@@ -75,7 +131,7 @@ class SleepcastProvider with ChangeNotifier {
         descriptionDe:
             'Schnelle Hilfe bei akutem Stress durch progressive Muskelentspannung und beruhigende Atemtechniken.',
         duration: const Duration(minutes: 10),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
       Sleepcast(
         id: 'sos_3',
@@ -85,7 +141,7 @@ class SleepcastProvider with ChangeNotifier {
         descriptionDe:
             'Gezielte Entspannungsübungen und Körperwahrnehmung zur schnellen Linderung von Rückenschmerzen im Liegen.',
         duration: const Duration(minutes: 12),
-        audioUrl: 'assets/sleepcasts/deutsch.mp3',
+        locale: ['de'],
       ),
     ]);
 

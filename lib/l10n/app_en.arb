@@ -3,5 +3,6 @@
     "goodEvening": "Good evening,",
     "dreamJourneyQuestion": "what dream journey would you like to embark on today?",
     "sleepcasts": "Sleepcasts",
-    "sos": "SOS"
+    "sos": "SOS",
+    "isLoading": "Is loading..."
 }
