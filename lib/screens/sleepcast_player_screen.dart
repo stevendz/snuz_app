@@ -73,21 +73,13 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    if (audioPlayer.isPlaying) {
-                      audioPlayer.pause();
-                    } else {
-                      audioPlayer.resume();
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Icon(
-                      audioPlayer.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                      color: textTheme.headlineLarge?.color,
-                      size: 48,
-                    ),
+                IconButton(
+                  padding: const EdgeInsets.all(32),
+                  onPressed: audioPlayer.isPlaying ? audioPlayer.pause : audioPlayer.resume,
+                  icon: Icon(
+                    audioPlayer.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                    color: textTheme.headlineLarge?.color,
+                    size: 48,
                   ),
                 ),
                 Flexible(
