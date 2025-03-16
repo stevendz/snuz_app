@@ -45,7 +45,8 @@ class SleepcastProvider with ChangeNotifier {
     notifyListeners();
     try {
       final R2Service service = R2Service();
-      final url = await service.getPresignedUrl(key: 'sleepcasts/$locale.mp3', expiration: const Duration(hours: 1));
+      final url =
+          await service.getPresignedUrl(key: 'sleepcasts/${cast.id}/$locale.mp3', expiration: const Duration(hours: 1));
       final savePath = '$_downloadDirectoryPath/sleepcasts/${cast.id}/$locale.mp3';
       final resp = await Dio().download(url, savePath, onReceiveProgress: (received, total) {
         loadingSleepcasts[cast.id] = received / total;
@@ -68,18 +69,18 @@ class SleepcastProvider with ChangeNotifier {
     }
   }
 
-  void _initializeDummyData() {
-    _sleepcastStory.addAll([
-      Sleepcast(id: 'story_1', duration: const Duration(minutes: 20), locale: ['de']),
-      Sleepcast(id: 'story_2', duration: const Duration(minutes: 15), locale: ['de']),
-      Sleepcast(id: 'story_3', duration: const Duration(minutes: 25), locale: ['de']),
-      Sleepcast(id: 'story_4', duration: const Duration(minutes: 18), locale: ['de']),
-    ]);
+  void _initializeDummyData() async {
+    // _sleepcastStory.addAll([
+    //   Sleepcast(id: 'story_1', duration: const Duration(minutes: 20), locale: ['de']),
+    //   Sleepcast(id: 'story_2', duration: const Duration(minutes: 15), locale: ['de']),
+    //   Sleepcast(id: 'story_3', duration: const Duration(minutes: 25), locale: ['de']),
+    //   Sleepcast(id: 'story_4', duration: const Duration(minutes: 18), locale: ['de']),
+    // ]);
 
     _sleepcastSOS.addAll([
-      Sleepcast(id: 'sos_1', duration: const Duration(minutes: 8), locale: ['de']),
+      Sleepcast(id: 'sos_1', duration: const Duration(minutes: 10), locale: ['de']),
       Sleepcast(id: 'sos_2', duration: const Duration(minutes: 10), locale: ['de']),
-      Sleepcast(id: 'sos_3', duration: const Duration(minutes: 12), locale: ['de']),
+      Sleepcast(id: 'sos_3', duration: const Duration(minutes: 10), locale: ['de']),
     ]);
 
     notifyListeners();

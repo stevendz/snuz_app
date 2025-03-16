@@ -49,6 +49,7 @@ class OverviewScreen extends StatelessWidget {
                                 Icons.person_outline_rounded,
                                 color: Theme.of(context).textTheme.headlineMedium?.color,
                               ),
+                              position: PopupMenuPosition.under,
                               onSelected: (locale) => context.read<LocaleProvider>().setLocale(locale),
                               itemBuilder: (BuildContext context) => const [
                                 PopupMenuItem(value: Locale('en', ''), child: Text('English')),
