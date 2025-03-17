@@ -22,7 +22,8 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
   @override
   void deactivate() {
     super.deactivate();
-    context.read<AudioPlayerProvider>().pause();
+    final locale = context.read<LocaleProvider>().locale.languageCode;
+    context.read<AudioPlayerProvider>().stop(widget.sleepcast, locale);
   }
 
   @override
@@ -75,7 +76,7 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                 ),
                 IconButton(
                   padding: const EdgeInsets.all(32),
-                  onPressed: audioPlayer.isPlaying ? audioPlayer.pause : audioPlayer.resume,
+                  onPressed: audioPlayer.isPlaying ? audioPlayer.pause : audioPlayer.play,
                   icon: Icon(
                     audioPlayer.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                     color: textTheme.headlineLarge?.color,

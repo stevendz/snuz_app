@@ -29,11 +29,6 @@ class AudioPlayerProvider with ChangeNotifier {
       _duration = playingAudio?.audio.duration ?? Duration.zero;
       notifyListeners();
     });
-
-    // _player.playlistAudioFinished.listen((Playing playing) {
-    //   _player.seek(Duration.zero);
-    //   _player.pause();
-    // });
   }
 
   bool get isPlaying => _isPlaying;
@@ -82,8 +77,21 @@ class AudioPlayerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> resume() async {
+  Future<void> play() async {
     await _player.play();
+    notifyListeners();
+  }
+
+  Future<void> stop(Sleepcast cast, String locale) async {
+    await _player.stop();
+    Wiredash.trackEvent(
+      'closing_sleepcast',
+      data: {
+        'id': cast.id,
+        'title': Sleepcasts.getTitle(cast.id, locale),
+        'seconds': _position.inSeconds,
+      },
+    );
     notifyListeners();
   }
 

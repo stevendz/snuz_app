@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/utils/r2_service.dart';
+import 'package:wiredash/wiredash.dart';
 
 class SleepcastProvider with ChangeNotifier {
   late String _downloadDirectoryPath;
@@ -41,6 +43,11 @@ class SleepcastProvider with ChangeNotifier {
   Future<Sleepcast?> downloadSleepcast(Sleepcast cast, String locale) async {
     if (isDownloaded(cast.id, locale)) return cast;
 
+    Wiredash.trackEvent(
+      'download_sleepcast',
+      data: {'id': cast.id, 'title': Sleepcasts.getTitle(cast.id, locale), 'locale': locale},
+    );
+
     loadingSleepcasts[cast.id] = 0;
     notifyListeners();
     try {
@@ -59,10 +66,7 @@ class SleepcastProvider with ChangeNotifier {
       return cast;
     } catch (e) {
       log(e.toString());
-      // Wiredash.trackEvent(
-      //   'Error loading sleepcast',
-      //   data: {'id': cast.id, 'error': e.toString()},
-      // );
+      Wiredash.trackEvent('Error loading sleepcast', data: {'id': cast.id, 'error': e.toString()});
       loadingSleepcasts.remove(cast.id);
       notifyListeners();
       return null;
