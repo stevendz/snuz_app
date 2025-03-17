@@ -70,12 +70,10 @@ class SleepcastProvider with ChangeNotifier {
   }
 
   void _initializeDummyData() async {
-    // _sleepcastStory.addAll([
-    //   Sleepcast(id: 'story_1', duration: const Duration(minutes: 20), locale: ['de']),
-    //   Sleepcast(id: 'story_2', duration: const Duration(minutes: 15), locale: ['de']),
-    //   Sleepcast(id: 'story_3', duration: const Duration(minutes: 25), locale: ['de']),
-    //   Sleepcast(id: 'story_4', duration: const Duration(minutes: 18), locale: ['de']),
-    // ]);
+    _sleepcastStory.addAll([
+      Sleepcast(id: 'cast_1', duration: const Duration(minutes: 25), locale: ['de']),
+      Sleepcast(id: 'cast_2', duration: const Duration(minutes: 30), locale: ['de']),
+    ]);
 
     _sleepcastSOS.addAll([
       Sleepcast(id: 'sos_1', duration: const Duration(minutes: 10), locale: ['de']),
