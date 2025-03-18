@@ -3,8 +3,8 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/models/sleepcast.dart';
-import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
+import 'package:snuz_app/providers/locale_provider.dart';
 
 class SleepcastPlayerScreen extends StatefulWidget {
   const SleepcastPlayerScreen({

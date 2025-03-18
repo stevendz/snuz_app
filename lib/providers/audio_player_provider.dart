@@ -60,7 +60,6 @@ class AudioPlayerProvider with ChangeNotifier {
           resumeOthersPlayersAfterDone: true,
         ),
         headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
-        playInBackground: PlayInBackground.enabled,
       );
 
       notifyListeners();

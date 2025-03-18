@@ -13,7 +13,7 @@ class Sleepcast {
     return Sleepcast(
       id: json['id'] as String,
       duration: Duration(seconds: json['duration'] as int),
-      locale: List<String>.from(json['locale']),
+      locale: List<String>.from(json['locale'] as List<String>),
     );
   }
 

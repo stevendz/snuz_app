@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/models/sleepcast.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
 import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
@@ -22,7 +22,6 @@ class SleepcastItem extends StatefulWidget {
 }
 
 class _SleepcastItemState extends State<SleepcastItem> {
-  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final sleepcastProvider = context.watch<SleepcastProvider>();
@@ -31,6 +30,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
     final locale = context.watch<LocaleProvider>().locale.languageCode;
     final l10n = AppLocalizations.of(context)!;
     final isDownloaded = sleepcastProvider.isDownloaded(widget.cast.id, locale);
+    final isLoading = sleepcastProvider.loadingSleepcasts[widget.cast] != null;
     return Opacity(
       opacity: isLoading ? 0.5 : 1,
       child: Container(
@@ -38,7 +38,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
         decoration: BoxDecoration(
           color: const Color(0xCC1d223f),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+          border: Border.all(color: Colors.white.withOpacity(0.2)),
         ),
         child: Material(
           color: Colors.transparent,
@@ -46,7 +46,6 @@ class _SleepcastItemState extends State<SleepcastItem> {
             onTap: isLoading || sleepcastProvider.loadingSleepcasts.isNotEmpty
                 ? null
                 : () async {
-                    setState(() => isLoading = true);
                     await sleepcastProvider.downloadSleepcast(widget.cast, locale);
                     final path = sleepcastProvider.getSleepcastPath(widget.cast.id, locale);
                     await audioPlayerProvider.openSleepcast(widget.cast, path, locale);
@@ -55,7 +54,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       data: {
                         'id': widget.cast.id,
                         'title': Sleepcasts.getTitle(widget.cast.id, locale),
-                        'locale': locale
+                        'locale': locale,
                       },
                     );
                     if (!context.mounted) return;
@@ -63,7 +62,6 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       context,
                       MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(sleepcast: widget.cast)),
                     );
-                    setState(() => isLoading = false);
                   },
             borderRadius: BorderRadius.circular(12),
             child: Padding(

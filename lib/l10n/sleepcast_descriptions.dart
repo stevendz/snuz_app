@@ -34,7 +34,7 @@ class Sleepcasts {
         'sos_1': 'Eine beruhigende Meditation mit Visualisierungen, um rasende Gedanken zu ordnen.',
         'sos_2': 'Sanfte Atemtechniken und Affirmationen, um Ängste vor der Zukunft zu lindern.',
         'sos_3': 'Entspannende Übungen, um nach einem stressigen Tag innere Ruhe zu finden.',
-      }
+      },
     };
 
     return descriptions[locale]?[id] ?? descriptions['en']?[id] ?? 'Description not found';

@@ -10,6 +10,7 @@ class R2Service {
 
   Future<String> getPresignedUrl({
     required String key,
+    String method = 'GET',
     Duration expiration = const Duration(minutes: 60),
   }) async {
     final endpoint = 'https://$accountId.r2.cloudflarestorage.com';
@@ -31,12 +32,12 @@ class R2Service {
     final canonicalQueryString = params.entries.map((e) => '${e.key}=${Uri.encodeComponent(e.value)}').join('&');
 
     final canonicalRequest = [
-      'GET',
+      method,
       '/$bucket/$key',
       canonicalQueryString,
       'host:$accountId.r2.cloudflarestorage.com\n',
       'host',
-      'UNSIGNED-PAYLOAD'
+      'UNSIGNED-PAYLOAD',
     ].join('\n');
 
     // Create string to sign
