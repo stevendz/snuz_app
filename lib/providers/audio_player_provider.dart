@@ -43,12 +43,12 @@ class AudioPlayerProvider with ChangeNotifier {
           path,
           metas: Metas(
             id: cast.id,
-            title: Sleepcasts.getTitle(cast.id, locale),
+            title: Sleepcasts().getTitle(cast.id, locale),
             artist: "Snuz",
             album: "Snuz Sleepcasts",
             extra: {
-              'title': Sleepcasts.getTitle(cast.id, locale),
-              'description': Sleepcasts.getDescription(cast.id, locale),
+              'title': Sleepcasts().getTitle(cast.id, locale),
+              'description': Sleepcasts().getDescription(cast.id, locale),
             },
           ),
         ),
@@ -66,7 +66,7 @@ class AudioPlayerProvider with ChangeNotifier {
     } catch (e) {
       Wiredash.trackEvent(
         'error_opening_sleepcast',
-        data: {'id': cast.id, 'title': Sleepcasts.getTitle(cast.id, locale)},
+        data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id, locale)},
       );
     }
   }
@@ -87,7 +87,7 @@ class AudioPlayerProvider with ChangeNotifier {
       'closing_sleepcast',
       data: {
         'id': cast.id,
-        'title': Sleepcasts.getTitle(cast.id, locale),
+        'title': Sleepcasts().getTitle(cast.id, locale),
         'seconds': _position.inSeconds,
       },
     );

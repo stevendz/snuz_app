@@ -1,5 +1,5 @@
 class Sleepcasts {
-  static String getTitle(String id, String locale) {
+  String getTitle(String id, String locale) {
     final title = {
       'en': {
         'cast_1': 'Moroccan Garden',
@@ -19,7 +19,7 @@ class Sleepcasts {
     return title[locale]?[id] ?? title['en']?[id] ?? '';
   }
 
-  static String getDescription(String id, String locale) {
+  String getDescription(String id, String locale) {
     final descriptions = {
       'en': {
         'cast_1': 'Relax and unwind in a tranquil Moroccan garden under the serene moonlight.',

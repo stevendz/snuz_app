@@ -60,7 +60,7 @@ class SleepcastProvider with ChangeNotifier {
 
     Wiredash.trackEvent(
       isUpdateAvailable ? 'update_sleepcast' : 'download_sleepcast',
-      data: {'id': cast.id, 'title': Sleepcasts.getTitle(cast.id, locale), 'locale': locale},
+      data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id, locale), 'locale': locale},
     );
 
     loadingSleepcasts[cast] = 0;

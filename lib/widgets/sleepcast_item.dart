@@ -53,7 +53,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       'open_sleepcast',
                       data: {
                         'id': widget.cast.id,
-                        'title': Sleepcasts.getTitle(widget.cast.id, locale),
+                        'title': Sleepcasts().getTitle(widget.cast.id, locale),
                         'locale': locale,
                       },
                     );
@@ -74,7 +74,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       Text(
                         isLoading
                             ? '${l10n.isLoading} ${((sleepcastProvider.loadingSleepcasts.entries.firstOrNull?.value ?? 0) * 100).toStringAsFixed(0)}%'
-                            : Sleepcasts.getTitle(widget.cast.id, locale),
+                            : Sleepcasts().getTitle(widget.cast.id, locale),
                         style: textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -103,7 +103,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    Sleepcasts.getDescription(widget.cast.id, locale),
+                    Sleepcasts().getDescription(widget.cast.id, locale),
                     style: textTheme.bodyMedium,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

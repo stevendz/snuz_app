@@ -61,13 +61,13 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        Sleepcasts.getTitle(widget.sleepcast.id, locale),
+                        Sleepcasts().getTitle(widget.sleepcast.id, locale),
                         style: textTheme.headlineLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        Sleepcasts.getDescription(widget.sleepcast.id, locale),
+                        Sleepcasts().getDescription(widget.sleepcast.id, locale),
                         style: textTheme.bodyLarge,
                         textAlign: TextAlign.center,
                       ),
