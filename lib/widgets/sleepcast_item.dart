@@ -36,7 +36,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: const Color(0xCC1d223f),
+          color: Theme.of(context).primaryColor.withOpacity(0.8),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.white.withOpacity(0.2)),
         ),

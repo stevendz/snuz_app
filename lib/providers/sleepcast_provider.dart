@@ -91,6 +91,14 @@ class SleepcastProvider with ChangeNotifier {
     }
   }
 
+  void deleteDownloadedSleepcast(Sleepcast cast, String locale) {
+    final file = File('$_downloadDirectoryPath/sleepcasts/${cast.id}/$locale.mp3');
+    if (file.existsSync()) {
+      file.deleteSync();
+    }
+    notifyListeners();
+  }
+
   Future<void> _initializeDummyData() async {
     _sleepcastStory.addAll([
       Sleepcast(id: 'cast_1', duration: const Duration(minutes: 25), locale: ['de']),

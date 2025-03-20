@@ -1,8 +1,14 @@
 {
     "appTitle": "Snuz App",
-    "goodEvening": "Good evening,",
+    "downloadedMeditations": "Downloaded Meditations",
+    "downloads": "Downloads",
     "dreamJourneyQuestion": "what dream journey would you like to embark on today?",
+    "english": "English",
+    "german": "German",
+    "goodEvening": "Good evening,",
+    "isLoading": "Is loading...",
+    "language": "Language",
+    "profile": "Profile",
     "sleepcasts": "Sleepcasts",
-    "sos": "SOS",
-    "isLoading": "Is loading..."
+    "sos": "SOS"
 }

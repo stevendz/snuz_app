@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
+import 'package:snuz_app/screens/profile.dart';
 import 'package:snuz_app/widgets/sleepcast_item.dart';
 
 class OverviewScreen extends StatelessWidget {
@@ -35,7 +36,7 @@ class OverviewScreen extends StatelessWidget {
                 child: Scaffold(
                   backgroundColor: Colors.transparent,
                   body: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(24),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,21 +45,18 @@ class OverviewScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(l10n.goodEvening, style: Theme.of(context).textTheme.headlineLarge),
-                              PopupMenuButton<Locale>(
-                                color: Theme.of(context).textTheme.headlineLarge?.color,
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (c) => const ProfileScreen()));
+                                },
                                 icon: Icon(
                                   Icons.person_outline_rounded,
                                   color: Theme.of(context).textTheme.headlineMedium?.color,
                                 ),
-                                position: PopupMenuPosition.under,
-                                onSelected: (locale) => context.read<LocaleProvider>().setLocale(locale),
-                                itemBuilder: (BuildContext context) => const [
-                                  PopupMenuItem(value: Locale('en', ''), child: Text('English')),
-                                  PopupMenuItem(value: Locale('de', ''), child: Text('Deutsch')),
-                                ],
                               ),
                             ],
                           ),
+                          const SizedBox(height: 8),
                           Text(
                             l10n.dreamJourneyQuestion,
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w400),

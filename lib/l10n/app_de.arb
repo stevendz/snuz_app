@@ -1,8 +1,14 @@
 {
     "appTitle": "Snuz App",
-    "goodEvening": "Guten Abend,",
+    "downloadedMeditations": "Heruntergeladene Meditationen",
+    "downloads": "Downloads",
     "dreamJourneyQuestion": "auf welche Traumreise möchtest du dich heute begeben?",
+    "english": "Englisch",
+    "german": "Deutsch",
+    "goodEvening": "Guten Abend,",
+    "isLoading": "Wird geladen...",
+    "language": "Sprache",
+    "profile": "Profil",
     "sleepcasts": "Traumreisen",
-    "sos": "SOS",
-    "isLoading": "Wird geladen..."
+    "sos": "SOS"
 }

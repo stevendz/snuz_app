@@ -60,11 +60,23 @@ class MyApp extends StatelessWidget {
 }
 
 final theme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1d223f)),
   useMaterial3: true,
+  primaryColor: const Color(0xFF1d223f),
+  appBarTheme: AppBarTheme(
+    color: Colors.white.withOpacity(0.9),
+    iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(const Color(0xFF1d223f).withOpacity(0.8)),
+      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+      side: MaterialStateProperty.all(BorderSide(color: Colors.white.withOpacity(0.2))),
+    ),
+  ),
   textTheme: TextTheme(
     headlineLarge: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
-    headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.8)),
+    headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.9)),
     headlineSmall: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
     titleLarge: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
     titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white.withOpacity(0.9)),
