@@ -41,7 +41,16 @@ class SleepcastProvider with ChangeNotifier {
     return File('$_downloadDirectoryPath/sleepcasts/$id/$locale.mp3').existsSync();
   }
 
-  Future<bool> isNewVersionAvailable(String id, String locale) async {
+  Future<bool> isOnline() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> _isNewVersionAvailable(String id, String locale) async {
     final R2Service service = R2Service();
     final url = await service.getPresignedUrl(key: 'sleepcasts/$id/$locale.mp3', method: 'HEAD');
     final resp = await Dio().head(url);
@@ -53,10 +62,10 @@ class SleepcastProvider with ChangeNotifier {
     return lastModifiedServerUtc.isAfter(lastModifiedLocalUtc);
   }
 
-  Future<Sleepcast?> downloadSleepcast(Sleepcast cast, String locale) async {
-    final isUpdateAvailable = await isNewVersionAvailable(cast.id, locale);
-
-    if (isDownloaded(cast.id, locale) && !isUpdateAvailable) return cast;
+  Future<void> downloadSleepcast(Sleepcast cast, String locale) async {
+    if (!await isOnline()) return;
+    final isUpdateAvailable = await _isNewVersionAvailable(cast.id, locale);
+    if (isDownloaded(cast.id, locale) && !isUpdateAvailable) return;
 
     Wiredash.trackEvent(
       isUpdateAvailable ? 'update_sleepcast' : 'download_sleepcast',
@@ -81,13 +90,11 @@ class SleepcastProvider with ChangeNotifier {
         loadingSleepcasts.remove(cast);
         notifyListeners();
       }
-      return cast;
     } catch (e) {
       log(e.toString());
       Wiredash.trackEvent('Error loading sleepcast', data: {'id': cast.id, 'error': e.toString()});
       loadingSleepcasts.remove(cast);
       notifyListeners();
-      return null;
     }
   }
 

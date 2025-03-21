@@ -46,9 +46,14 @@ class _SleepcastItemState extends State<SleepcastItem> {
             onTap: isLoading || sleepcastProvider.loadingSleepcasts.isNotEmpty
                 ? null
                 : () async {
+                    if (!await sleepcastProvider.isOnline()) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No Internet')));
+                    }
                     await sleepcastProvider.downloadSleepcast(widget.cast, locale);
+                    if (!sleepcastProvider.isDownloaded(widget.cast.id, locale)) return;
                     final path = sleepcastProvider.getSleepcastPath(widget.cast.id, locale);
                     await audioPlayerProvider.openSleepcast(widget.cast, path, locale);
+
                     Wiredash.trackEvent(
                       'open_sleepcast',
                       data: {
