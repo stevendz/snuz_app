@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
+import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
-import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
+import 'package:snuz_app/providers/snackbar_service.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
+import 'package:snuz_app/utils/snackbar_data.dart';
 import 'package:wiredash/wiredash.dart';
 
 class SleepcastItem extends StatefulWidget {
@@ -27,8 +28,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
     final sleepcastProvider = context.watch<SleepcastProvider>();
     final audioPlayerProvider = context.watch<AudioPlayerProvider>();
     final textTheme = Theme.of(context).textTheme;
-    final locale = context.watch<LocaleProvider>().locale.languageCode;
-    final l10n = AppLocalizations.of(context)!;
+    final locale = l10n.localeName;
     final isDownloaded = sleepcastProvider.isDownloaded(widget.cast.id, locale);
     final isLoading = sleepcastProvider.loadingSleepcasts[widget.cast] != null;
     return Opacity(
@@ -41,13 +41,14 @@ class _SleepcastItemState extends State<SleepcastItem> {
           border: Border.all(color: Colors.white.withOpacity(0.2)),
         ),
         child: Material(
+          key: GlobalKey(),
           color: Colors.transparent,
           child: InkWell(
             onTap: isLoading || sleepcastProvider.loadingSleepcasts.isNotEmpty
                 ? null
                 : () async {
-                    if (!await sleepcastProvider.isOnline()) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No Internet')));
+                    if (await sleepcastProvider.isOnline()) {
+                      SnackbarService.instance.showSnackbar(SnackbarData(l10n).error);
                     }
                     await sleepcastProvider.downloadSleepcast(widget.cast, locale);
                     if (!sleepcastProvider.isDownloaded(widget.cast.id, locale)) return;

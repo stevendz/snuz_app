@@ -5,20 +5,23 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
-import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
 import 'package:snuz_app/screens/overview.dart';
 import 'package:wiredash/wiredash.dart';
+
+late AppLocalizations l10n;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AssetsAudioPlayer.setupNotificationsOpenAction((notification) => true);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   final prefs = await SharedPreferences.getInstance();
+  final locale = prefs.getString('locale') ?? 'en';
+  l10n = await AppLocalizations.delegate.load(Locale(locale));
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LocaleProvider(prefs: prefs)..init()),
         ChangeNotifierProvider(create: (_) => SleepcastProvider()..init()),
         ChangeNotifierProvider(create: (_) => AudioPlayerProvider()),
       ],

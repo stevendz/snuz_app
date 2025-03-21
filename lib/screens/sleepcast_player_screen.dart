@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
+import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
-import 'package:snuz_app/providers/locale_provider.dart';
 
 class SleepcastPlayerScreen extends StatefulWidget {
   const SleepcastPlayerScreen({
@@ -22,16 +22,15 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
   @override
   void deactivate() {
     super.deactivate();
-    final locale = context.read<LocaleProvider>().locale.languageCode;
+    final locale = l10n.localeName;
     context.read<AudioPlayerProvider>().stop(widget.sleepcast, locale);
   }
 
   @override
   Widget build(BuildContext context) {
-    final locale = context.watch<LocaleProvider>().locale.languageCode;
     final textTheme = Theme.of(context).textTheme;
     final audioPlayer = context.watch<AudioPlayerProvider>();
-
+    final locale = l10n.localeName;
     return Scaffold(
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
