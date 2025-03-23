@@ -81,16 +81,8 @@ class AudioPlayerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> stop(Sleepcast cast, String locale) async {
+  Future<void> stop() async {
     await _player.stop();
-    Wiredash.trackEvent(
-      'closing_sleepcast',
-      data: {
-        'id': cast.id,
-        'title': Sleepcasts().getTitle(cast.id),
-        'seconds': _position.inSeconds,
-      },
-    );
     notifyListeners();
   }
 

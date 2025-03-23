@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
+import 'package:wiredash/wiredash.dart';
 
 class SleepcastPlayerScreen extends StatefulWidget {
   const SleepcastPlayerScreen({
     super.key,
-    required this.sleepcast,
+    required this.cast,
   });
 
-  final Sleepcast sleepcast;
+  final Sleepcast cast;
 
   @override
   State<SleepcastPlayerScreen> createState() => _SleepcastPlayerScreenState();
@@ -20,10 +22,31 @@ class SleepcastPlayerScreen extends StatefulWidget {
 
 class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
   @override
+  void initState() {
+    super.initState();
+    Wiredash.trackEvent(
+      'open_sleepcast',
+      data: {
+        'id': widget.cast.id,
+        'title': Sleepcasts().getTitle(widget.cast.id),
+        'locale': l10n.localeName,
+      },
+    );
+  }
+
+  @override
   void deactivate() {
+    final player = context.read<AudioPlayerProvider>();
+    Wiredash.trackEvent(
+      'closing_sleepcast',
+      data: {
+        'id': widget.cast.id,
+        'title': Sleepcasts().getTitle(widget.cast.id),
+        'seconds': player.position.inSeconds,
+      },
+    );
+    player.stop();
     super.deactivate();
-    final locale = l10n.localeName;
-    context.read<AudioPlayerProvider>().stop(widget.sleepcast, locale);
   }
 
   @override
@@ -59,13 +82,13 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        Sleepcasts().getTitle(widget.sleepcast.id),
+                        Sleepcasts().getTitle(widget.cast.id),
                         style: textTheme.headlineLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        Sleepcasts().getDescription(widget.sleepcast.id),
+                        Sleepcasts().getDescription(widget.cast.id),
                         style: textTheme.bodyLarge,
                         textAlign: TextAlign.center,
                       ),
@@ -76,8 +99,8 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                   padding: const EdgeInsets.all(32),
                   onPressed: audioPlayer.isPlaying ? audioPlayer.pause : audioPlayer.play,
                   icon: Icon(
-                    audioPlayer.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                    color: textTheme.headlineLarge?.color,
+                    audioPlayer.isPlaying ? HugeIcons.strokeRoundedPause : HugeIcons.strokeRoundedPlay,
+                    color: textTheme.headlineLarge?.color?.withOpacity(0.8),
                     size: 48,
                   ),
                 ),
@@ -87,7 +110,7 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     children: [
                       PlayerProgressBar(
                         progress: audioPlayer.progress,
-                        duration: widget.sleepcast.duration,
+                        duration: widget.cast.duration,
                       ),
                     ],
                   ),

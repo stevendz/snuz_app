@@ -74,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(sleepcast: cast)),
+                            MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(cast: cast)),
                           );
                         },
                         trailing: IconButton(

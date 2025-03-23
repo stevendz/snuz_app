@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/main.dart';
@@ -6,7 +7,6 @@ import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
-import 'package:wiredash/wiredash.dart';
 
 class SleepcastItem extends StatefulWidget {
   const SleepcastItem({
@@ -48,19 +48,10 @@ class _SleepcastItemState extends State<SleepcastItem> {
                     if (!sleepcastProvider.isDownloaded(widget.cast.id)) return;
                     final path = sleepcastProvider.getSleepcastPath(widget.cast.id);
                     await audioPlayerProvider.openSleepcast(widget.cast, path);
-
-                    Wiredash.trackEvent(
-                      'open_sleepcast',
-                      data: {
-                        'id': widget.cast.id,
-                        'title': Sleepcasts().getTitle(widget.cast.id),
-                        'locale': l10n.localeName,
-                      },
-                    );
                     if (!context.mounted) return;
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(sleepcast: widget.cast)),
+                      MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(cast: widget.cast)),
                     );
                   },
             borderRadius: BorderRadius.circular(12),
@@ -80,13 +71,13 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       const Spacer(),
                       if (isDownloaded)
                         Icon(
-                          Icons.download_done_rounded,
+                          HugeIcons.strokeRoundedDownload04,
                           color: textTheme.bodyMedium?.color?.withOpacity(1),
                           size: 20,
                         )
                       else
                         Icon(
-                          Icons.cloud_download_outlined,
+                          HugeIcons.strokeRoundedDownload04,
                           color: textTheme.bodyMedium?.color?.withOpacity(0.15),
                           size: 20,
                         ),

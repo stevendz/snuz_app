@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/main.dart';
@@ -38,7 +39,7 @@ class OverviewScreen extends StatelessWidget {
                                 Navigator.of(context).push(MaterialPageRoute(builder: (c) => const ProfileScreen()));
                               },
                               icon: Icon(
-                                Icons.person_outline_rounded,
+                                HugeIcons.strokeRoundedUser,
                                 color: Theme.of(context).textTheme.headlineMedium?.color,
                               ),
                             ),
