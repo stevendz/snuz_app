@@ -36,19 +36,19 @@ class AudioPlayerProvider with ChangeNotifier {
   Duration get duration => _duration;
   double get progress => duration.inSeconds > 0 ? position.inSeconds / duration.inSeconds : 0.0;
 
-  Future<void> openSleepcast(Sleepcast cast, String path, String locale) async {
+  Future<void> openSleepcast(Sleepcast cast, String path) async {
     try {
       await _player.open(
         Audio.file(
           path,
           metas: Metas(
             id: cast.id,
-            title: Sleepcasts().getTitle(cast.id, locale),
+            title: Sleepcasts().getTitle(cast.id),
             artist: "Snuz",
             album: "Snuz Sleepcasts",
             extra: {
-              'title': Sleepcasts().getTitle(cast.id, locale),
-              'description': Sleepcasts().getDescription(cast.id, locale),
+              'title': Sleepcasts().getTitle(cast.id),
+              'description': Sleepcasts().getDescription(cast.id),
             },
           ),
         ),
@@ -66,7 +66,7 @@ class AudioPlayerProvider with ChangeNotifier {
     } catch (e) {
       Wiredash.trackEvent(
         'error_opening_sleepcast',
-        data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id, locale)},
+        data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id)},
       );
     }
   }
@@ -87,7 +87,7 @@ class AudioPlayerProvider with ChangeNotifier {
       'closing_sleepcast',
       data: {
         'id': cast.id,
-        'title': Sleepcasts().getTitle(cast.id, locale),
+        'title': Sleepcasts().getTitle(cast.id),
         'seconds': _position.inSeconds,
       },
     );

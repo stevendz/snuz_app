@@ -28,8 +28,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
     final sleepcastProvider = context.watch<SleepcastProvider>();
     final audioPlayerProvider = context.watch<AudioPlayerProvider>();
     final textTheme = Theme.of(context).textTheme;
-    final locale = l10n.localeName;
-    final isDownloaded = sleepcastProvider.isDownloaded(widget.cast.id, locale);
+    final isDownloaded = sleepcastProvider.isDownloaded(widget.cast.id);
     final isLoading = sleepcastProvider.loadingSleepcasts[widget.cast] != null;
     return Opacity(
       opacity: isLoading ? 0.5 : 1,
@@ -47,20 +46,20 @@ class _SleepcastItemState extends State<SleepcastItem> {
             onTap: isLoading || sleepcastProvider.loadingSleepcasts.isNotEmpty
                 ? null
                 : () async {
-                    if (await sleepcastProvider.isOnline()) {
-                      SnackbarService.instance.showSnackbar(SnackbarData(l10n).error);
+                    if (!await sleepcastProvider.isOnline()) {
+                      SnackbarService.instance.showSnackbar(SnackbarData().error);
                     }
-                    await sleepcastProvider.downloadSleepcast(widget.cast, locale);
-                    if (!sleepcastProvider.isDownloaded(widget.cast.id, locale)) return;
-                    final path = sleepcastProvider.getSleepcastPath(widget.cast.id, locale);
-                    await audioPlayerProvider.openSleepcast(widget.cast, path, locale);
+                    await sleepcastProvider.downloadSleepcast(widget.cast);
+                    if (!sleepcastProvider.isDownloaded(widget.cast.id)) return;
+                    final path = sleepcastProvider.getSleepcastPath(widget.cast.id);
+                    await audioPlayerProvider.openSleepcast(widget.cast, path);
 
                     Wiredash.trackEvent(
                       'open_sleepcast',
                       data: {
                         'id': widget.cast.id,
-                        'title': Sleepcasts().getTitle(widget.cast.id, locale),
-                        'locale': locale,
+                        'title': Sleepcasts().getTitle(widget.cast.id),
+                        'locale': l10n.localeName,
                       },
                     );
                     if (!context.mounted) return;
@@ -80,7 +79,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       Text(
                         isLoading
                             ? '${l10n.isLoading} ${((sleepcastProvider.loadingSleepcasts.entries.firstOrNull?.value ?? 0) * 100).toStringAsFixed(0)}%'
-                            : Sleepcasts().getTitle(widget.cast.id, locale),
+                            : Sleepcasts().getTitle(widget.cast.id),
                         style: textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -109,7 +108,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    Sleepcasts().getDescription(widget.cast.id, locale),
+                    Sleepcasts().getDescription(widget.cast.id),
                     style: textTheme.bodyMedium,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

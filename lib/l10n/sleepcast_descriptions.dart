@@ -1,5 +1,8 @@
+import 'package:snuz_app/main.dart';
+
 class Sleepcasts {
-  String getTitle(String id, String locale) {
+  String getTitle(String id) {
+    final locale = l10n.localeName;
     final title = {
       'en': {
         'cast_1': 'Moroccan Garden',
@@ -19,7 +22,8 @@ class Sleepcasts {
     return title[locale]?[id] ?? title['en']?[id] ?? '';
   }
 
-  String getDescription(String id, String locale) {
+  String getDescription(String id) {
+    final locale = l10n.localeName;
     final descriptions = {
       'en': {
         'cast_1': 'Relax and unwind in a tranquil Moroccan garden under the serene moonlight.',

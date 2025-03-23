@@ -10,5 +10,8 @@
     "language": "Language",
     "profile": "Profile",
     "sleepcasts": "Sleepcasts",
-    "sos": "SOS"
+    "sos": "SOS",
+    "errorTryAgainLater": "An error occurred. Please try again later.",
+    "noInternetWarning": "No internet connection available.",
+    "downloadedSuccessfully": "Downloaded successfully!"
 }

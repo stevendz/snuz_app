@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:snuz_app/main.dart';
 
 class SnackbarData {
-  SnackbarData(this.l10n);
-  final AppLocalizations l10n;
-
   SnackBar get error => SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.red,
+        content: Text(l10n.errorTryAgainLater),
+      );
+  SnackBar get noInternet => SnackBar(
+        backgroundColor: Colors.yellow,
+        content: Text(l10n.noInternetWarning),
+      );
+  SnackBar get downloadedSuccessfully => SnackBar(
         backgroundColor: Colors.green,
-        showCloseIcon: true,
-        content: Text(l10n.dreamJourneyQuestion),
+        content: Text(l10n.downloadedSuccessfully),
       );
 }

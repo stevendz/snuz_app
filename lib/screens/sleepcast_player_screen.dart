@@ -30,7 +30,6 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final audioPlayer = context.watch<AudioPlayerProvider>();
-    final locale = l10n.localeName;
     return Scaffold(
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
@@ -60,13 +59,13 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        Sleepcasts().getTitle(widget.sleepcast.id, locale),
+                        Sleepcasts().getTitle(widget.sleepcast.id),
                         style: textTheme.headlineLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        Sleepcasts().getDescription(widget.sleepcast.id, locale),
+                        Sleepcasts().getDescription(widget.sleepcast.id),
                         style: textTheme.bodyLarge,
                         textAlign: TextAlign.center,
                       ),

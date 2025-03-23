@@ -10,5 +10,8 @@
     "language": "Sprache",
     "profile": "Profil",
     "sleepcasts": "Traumreisen",
-    "sos": "SOS"
+    "sos": "SOS",
+    "errorTryAgainLater": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "noInternetWarning": "Keine Internetverbindung verfügbar.",
+    "downloadedSuccessfully": "Erfolgreich heruntergeladen!"
 }

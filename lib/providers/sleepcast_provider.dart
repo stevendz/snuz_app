@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
+import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/utils/r2_service.dart';
 import 'package:wiredash/wiredash.dart';
@@ -33,12 +34,12 @@ class SleepcastProvider with ChangeNotifier {
     }
   }
 
-  String getSleepcastPath(String id, String locale) {
-    return '$_downloadDirectoryPath/sleepcasts/$id/$locale.mp3';
+  String getSleepcastPath(String id) {
+    return '$_downloadDirectoryPath/sleepcasts/$id/${l10n.localeName}.mp3';
   }
 
-  bool isDownloaded(String id, String locale) {
-    return File('$_downloadDirectoryPath/sleepcasts/$id/$locale.mp3').existsSync();
+  bool isDownloaded(String id) {
+    return File('$_downloadDirectoryPath/sleepcasts/$id/${l10n.localeName}.mp3').existsSync();
   }
 
   Future<bool> isOnline() async {
@@ -50,11 +51,11 @@ class SleepcastProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> _isNewVersionAvailable(String id, String locale) async {
+  Future<bool> _isNewVersionAvailable(String id) async {
     final R2Service service = R2Service();
-    final url = await service.getPresignedUrl(key: 'sleepcasts/$id/$locale.mp3', method: 'HEAD');
+    final url = await service.getPresignedUrl(key: 'sleepcasts/$id/${l10n.localeName}.mp3', method: 'HEAD');
     final resp = await Dio().head(url);
-    final file = File('$_downloadDirectoryPath/sleepcasts/$id/$locale.mp3');
+    final file = File('$_downloadDirectoryPath/sleepcasts/$id/${l10n.localeName}.mp3');
     final format = DateFormat('EEE, dd MMM yyyy HH:mm:ss zzz');
     final DateTime lastModifiedServerUtc = format.parse(resp.headers.map['last-modified']?.first ?? '');
     final DateTime l = file.statSync().modified.toUtc();
@@ -62,22 +63,22 @@ class SleepcastProvider with ChangeNotifier {
     return lastModifiedServerUtc.isAfter(lastModifiedLocalUtc);
   }
 
-  Future<void> downloadSleepcast(Sleepcast cast, String locale) async {
+  Future<void> downloadSleepcast(Sleepcast cast) async {
     if (!await isOnline()) return;
-    final isUpdateAvailable = await _isNewVersionAvailable(cast.id, locale);
-    if (isDownloaded(cast.id, locale) && !isUpdateAvailable) return;
+    final isUpdateAvailable = await _isNewVersionAvailable(cast.id);
+    if (isDownloaded(cast.id) && !isUpdateAvailable) return;
 
     Wiredash.trackEvent(
       isUpdateAvailable ? 'update_sleepcast' : 'download_sleepcast',
-      data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id, locale), 'locale': locale},
+      data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id), 'locale': l10n.localeName},
     );
 
     loadingSleepcasts[cast] = 0;
     notifyListeners();
     try {
       final R2Service service = R2Service();
-      final url = await service.getPresignedUrl(key: 'sleepcasts/${cast.id}/$locale.mp3');
-      final savePath = '$_downloadDirectoryPath/sleepcasts/${cast.id}/$locale.mp3';
+      final url = await service.getPresignedUrl(key: 'sleepcasts/${cast.id}/${l10n.localeName}.mp3');
+      final savePath = '$_downloadDirectoryPath/sleepcasts/${cast.id}/${l10n.localeName}.mp3';
       final resp = await Dio().download(
         url,
         savePath,
@@ -98,8 +99,8 @@ class SleepcastProvider with ChangeNotifier {
     }
   }
 
-  void deleteDownloadedSleepcast(Sleepcast cast, String locale) {
-    final file = File('$_downloadDirectoryPath/sleepcasts/${cast.id}/$locale.mp3');
+  void deleteDownloadedSleepcast(Sleepcast cast) {
+    final file = File('$_downloadDirectoryPath/sleepcasts/${cast.id}/${l10n.localeName}.mp3');
     if (file.existsSync()) {
       file.deleteSync();
     }

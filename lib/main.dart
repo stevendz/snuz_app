@@ -70,6 +70,11 @@ final theme = ThemeData(
     color: Colors.white.withOpacity(0.9),
     iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
   ),
+  snackBarTheme: const SnackBarThemeData(
+    elevation: 0,
+    behavior: SnackBarBehavior.floating,
+    showCloseIcon: true,
+  ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(const Color(0xFF1d223f).withOpacity(0.8)),

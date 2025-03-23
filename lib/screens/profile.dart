@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                   Text(l10n.downloadedMeditations, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 8),
                   for (final cast in [...castProvider.sleepcastSOS, ...castProvider.sleepcastStory])
-                    if (castProvider.isDownloaded(cast.id, locale.languageCode))
+                    if (castProvider.isDownloaded(cast.id))
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: Icon(
@@ -65,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
                           size: 20,
                         ),
                         title: Text(
-                          Sleepcasts().getTitle(cast.id, locale.languageCode),
+                          Sleepcasts().getTitle(cast.id),
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         onTap: () {
@@ -75,9 +75,7 @@ class ProfileScreen extends StatelessWidget {
                           );
                         },
                         trailing: IconButton(
-                          onPressed: () {
-                            castProvider.deleteDownloadedSleepcast(cast, locale.languageCode);
-                          },
+                          onPressed: () => castProvider.deleteDownloadedSleepcast(cast),
                           icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                         ),
                       ),
