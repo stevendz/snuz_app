@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
+import 'package:snuz_app/providers/snackbar_service.dart';
 import 'package:snuz_app/screens/overview.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
+import 'package:snuz_app/utils/snackbar_data.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -76,9 +79,39 @@ class ProfileScreen extends StatelessWidget {
                         },
                         trailing: IconButton(
                           onPressed: () => castProvider.deleteDownloadedSleepcast(cast),
-                          icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                          icon: const Icon(Icons.delete, color: Color(0xffb63b45), size: 20),
                         ),
                       ),
+                  Visibility(
+                    // ignore: avoid_redundant_argument_values
+                    visible: kDebugMode,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 16),
+                        Text('Develper Section', style: Theme.of(context).textTheme.headlineMedium),
+                        const SizedBox(height: 8),
+                        TextButton(
+                          onPressed: () {
+                            SnackbarService.instance.showSnackbar(SnackbarData().downloadedSuccessfully);
+                          },
+                          child: const Text('Success'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            SnackbarService.instance.showSnackbar(SnackbarData().noInternet);
+                          },
+                          child: const Text('Info'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            SnackbarService.instance.showSnackbar(SnackbarData().error);
+                          },
+                          child: const Text('Error'),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

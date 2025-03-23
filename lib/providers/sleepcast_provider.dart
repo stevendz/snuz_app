@@ -8,7 +8,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
+import 'package:snuz_app/providers/snackbar_service.dart';
 import 'package:snuz_app/utils/r2_service.dart';
+import 'package:snuz_app/utils/snackbar_data.dart';
 import 'package:wiredash/wiredash.dart';
 
 class SleepcastProvider with ChangeNotifier {
@@ -64,7 +66,11 @@ class SleepcastProvider with ChangeNotifier {
   }
 
   Future<void> downloadSleepcast(Sleepcast cast) async {
-    if (!await isOnline()) return;
+    if (!await isOnline()) {
+      SnackbarService.instance.showSnackbar(SnackbarData().noInternet);
+      return;
+    }
+
     final isUpdateAvailable = await _isNewVersionAvailable(cast.id);
     if (isDownloaded(cast.id) && !isUpdateAvailable) return;
 
@@ -89,10 +95,12 @@ class SleepcastProvider with ChangeNotifier {
       );
       if (resp.statusCode == 200) {
         loadingSleepcasts.remove(cast);
+        SnackbarService.instance.showSnackbar(SnackbarData().downloadedSuccessfully);
         notifyListeners();
       }
     } catch (e) {
       log(e.toString());
+      SnackbarService.instance.showSnackbar(SnackbarData().error);
       Wiredash.trackEvent('Error loading sleepcast', data: {'id': cast.id, 'error': e.toString()});
       loadingSleepcasts.remove(cast);
       notifyListeners();

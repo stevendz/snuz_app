@@ -5,9 +5,7 @@ import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
-import 'package:snuz_app/providers/snackbar_service.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
-import 'package:snuz_app/utils/snackbar_data.dart';
 import 'package:wiredash/wiredash.dart';
 
 class SleepcastItem extends StatefulWidget {
@@ -46,9 +44,6 @@ class _SleepcastItemState extends State<SleepcastItem> {
             onTap: isLoading || sleepcastProvider.loadingSleepcasts.isNotEmpty
                 ? null
                 : () async {
-                    if (!await sleepcastProvider.isOnline()) {
-                      SnackbarService.instance.showSnackbar(SnackbarData().error);
-                    }
                     await sleepcastProvider.downloadSleepcast(widget.cast);
                     if (!sleepcastProvider.isDownloaded(widget.cast.id)) return;
                     final path = sleepcastProvider.getSleepcastPath(widget.cast.id);
