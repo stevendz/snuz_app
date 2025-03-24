@@ -9,7 +9,6 @@ import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/models/sleepcast.dart';
 import 'package:snuz_app/providers/snackbar_service.dart';
-import 'package:snuz_app/utils/r2_service.dart';
 import 'package:snuz_app/utils/snackbar_data.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -54,40 +53,41 @@ class SleepcastProvider with ChangeNotifier {
   }
 
   Future<bool> _isNewVersionAvailable(String id) async {
-    final R2Service service = R2Service();
-    final url = await service.getPresignedUrl(key: 'sleepcasts/$id/${l10n.localeName}.mp3', method: 'HEAD');
-    final resp = await Dio().head(url);
-    final file = File('$_downloadDirectoryPath/sleepcasts/$id/${l10n.localeName}.mp3');
-    final format = DateFormat('EEE, dd MMM yyyy HH:mm:ss zzz');
-    final DateTime lastModifiedServerUtc = format.parse(resp.headers.map['last-modified']?.first ?? '');
+    final path = '/sleepcasts/$id/${l10n.localeName}.mp3';
+    final resp = await Dio().head(
+      'https://snuz-app.webrabbits.workers.dev$path',
+      options: Options(headers: {'auth': 'BLiM8TRxhKC0UGAgr5LY6dnzCyH1zBOf'}),
+    );
+    final file = File('$_downloadDirectoryPath$path');
+    final format = DateFormat('EEE MMM dd yyyy HH:mm:ss', 'en_US');
+    final DateTime lastModifiedServerUtc = format.parse(resp.headers.map['uploaded']?.first ?? '');
     final DateTime l = file.statSync().modified.toUtc();
     final DateTime lastModifiedLocalUtc = DateTime(l.year, l.month, l.day, l.hour, l.minute, l.second);
     return lastModifiedServerUtc.isAfter(lastModifiedLocalUtc);
   }
 
   Future<void> downloadSleepcast(Sleepcast cast) async {
-    if (!await isOnline()) {
-      SnackbarService.instance.showSnackbar(SnackbarData().noInternet);
-      return;
-    }
-
-    final isUpdateAvailable = await _isNewVersionAvailable(cast.id);
-    if (isDownloaded(cast.id) && !isUpdateAvailable) return;
-
-    Wiredash.trackEvent(
-      isUpdateAvailable ? 'update_sleepcast' : 'download_sleepcast',
-      data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id), 'locale': l10n.localeName},
-    );
-
-    loadingSleepcasts[cast] = 0;
-    notifyListeners();
     try {
-      final R2Service service = R2Service();
-      final url = await service.getPresignedUrl(key: 'sleepcasts/${cast.id}/${l10n.localeName}.mp3');
-      final savePath = '$_downloadDirectoryPath/sleepcasts/${cast.id}/${l10n.localeName}.mp3';
+      if (!await isOnline()) {
+        SnackbarService.instance.showSnackbar(SnackbarData().noInternet);
+        return;
+      }
+
+      final isUpdateAvailable = await _isNewVersionAvailable(cast.id);
+      if (isDownloaded(cast.id) && !isUpdateAvailable) return;
+
+      Wiredash.trackEvent(
+        isUpdateAvailable ? 'update_sleepcast' : 'download_sleepcast',
+        data: {'id': cast.id, 'title': Sleepcasts().getTitle(cast.id), 'locale': l10n.localeName},
+      );
+
+      loadingSleepcasts[cast] = 0;
+      notifyListeners();
+      final path = '/sleepcasts/${cast.id}/${l10n.localeName}.mp3';
       final resp = await Dio().download(
-        url,
-        savePath,
+        'https://snuz-app.webrabbits.workers.dev$path',
+        options: Options(headers: {'auth': 'BLiM8TRxhKC0UGAgr5LY6dnzCyH1zBOf'}),
+        '$_downloadDirectoryPath$path',
         onReceiveProgress: (received, total) {
           loadingSleepcasts[cast] = received / total;
           notifyListeners();
