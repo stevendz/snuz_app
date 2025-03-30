@@ -1,4 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,6 +19,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final locale = prefs.getString('locale') ?? 'en';
   l10n = await AppLocalizations.delegate.load(Locale(locale));
+  await Firebase.initializeApp();
 
   runApp(
     MultiProvider(

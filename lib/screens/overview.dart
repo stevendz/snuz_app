@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
@@ -8,8 +9,32 @@ import 'package:snuz_app/screens/profile.dart';
 import 'package:snuz_app/utils/snackbar_listener.dart';
 import 'package:snuz_app/widgets/sleepcast_item.dart';
 
-class OverviewScreen extends StatelessWidget {
+class OverviewScreen extends StatefulWidget {
   const OverviewScreen({super.key});
+
+  @override
+  State<OverviewScreen> createState() => _OverviewScreenState();
+}
+
+class _OverviewScreenState extends State<OverviewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+    () async {
+      final settings = await FirebaseMessaging.instance.requestPermission();
+      print('User granted permission: ${settings.authorizationStatus}');
+      final fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+      print(fcmToken);
+    }();
+  }
 
   @override
   Widget build(BuildContext context) {
