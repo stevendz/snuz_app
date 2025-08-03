@@ -33,9 +33,9 @@ class _SleepcastItemState extends State<SleepcastItem> {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(0.8),
+          color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
         child: Material(
           key: GlobalKey(),
@@ -72,20 +72,20 @@ class _SleepcastItemState extends State<SleepcastItem> {
                       if (isDownloaded)
                         Icon(
                           HugeIcons.strokeRoundedDownload04,
-                          color: textTheme.bodyMedium?.color?.withOpacity(1),
+                          color: textTheme.bodyMedium?.color?.withValues(alpha: 1),
                           size: 20,
                         )
                       else
                         Icon(
                           HugeIcons.strokeRoundedDownload04,
-                          color: textTheme.bodyMedium?.color?.withOpacity(0.15),
+                          color: textTheme.bodyMedium?.color?.withValues(alpha: 0.15),
                           size: 20,
                         ),
                       const SizedBox(width: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text('${widget.cast.duration.inMinutes} min', style: textTheme.bodyMedium),

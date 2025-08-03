@@ -100,7 +100,7 @@ class _SleepcastPlayerScreenState extends State<SleepcastPlayerScreen> {
                   onPressed: audioPlayer.isPlaying ? audioPlayer.pause : audioPlayer.play,
                   icon: Icon(
                     audioPlayer.isPlaying ? HugeIcons.strokeRoundedPause : HugeIcons.strokeRoundedPlay,
-                    color: textTheme.headlineLarge?.color?.withOpacity(0.8),
+                    color: textTheme.headlineLarge?.color?.withValues(alpha: 0.8),
                     size: 48,
                   ),
                 ),
@@ -150,7 +150,7 @@ class PlayerProgressBar extends StatelessWidget {
             trackHeight: 4,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
             activeTrackColor: Colors.white,
-            inactiveTrackColor: Colors.white.withOpacity(0.2),
+            inactiveTrackColor: Colors.white.withValues(alpha: 0.2),
           ),
           child: Slider(value: progress, onChanged: (_) {}),
         ),
