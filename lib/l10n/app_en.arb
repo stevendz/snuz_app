@@ -13,5 +13,7 @@
     "sos": "SOS",
     "errorTryAgainLater": "An error occurred. Please try again later.",
     "noInternetWarning": "No internet connection available.",
-    "downloadedSuccessfully": "Downloaded successfully!"
+    "downloadedSuccessfully": "Downloaded successfully!",
+    "featureRequest": "Feature Request",
+    "submitFeatureRequest": "Submit Feature Request"
 }

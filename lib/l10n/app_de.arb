@@ -13,5 +13,7 @@
     "sos": "SOS",
     "errorTryAgainLater": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
     "noInternetWarning": "Keine Internetverbindung verfügbar.",
-    "downloadedSuccessfully": "Erfolgreich heruntergeladen!"
+    "downloadedSuccessfully": "Erfolgreich heruntergeladen!",
+    "featureRequest": "Feature-Anfrage",
+    "submitFeatureRequest": "Feature-Anfrage einreichen"
 }

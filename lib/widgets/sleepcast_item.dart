@@ -31,7 +31,7 @@ class _SleepcastItemState extends State<SleepcastItem> {
     return Opacity(
       opacity: isLoading ? 0.5 : 1,
       child: Container(
-        height: 120,
+        constraints: const BoxConstraints(minHeight: 120),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(12),
@@ -59,16 +59,21 @@ class _SleepcastItemState extends State<SleepcastItem> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
-                      Text(
-                        isLoading
-                            ? '${l10n.isLoading} ${((sleepcastProvider.loadingSleepcasts.entries.firstOrNull?.value ?? 0) * 100).toStringAsFixed(0)}%'
-                            : Sleepcasts().getTitle(widget.cast.id),
-                        style: textTheme.titleLarge,
+                      Expanded(
+                        child: Text(
+                          isLoading
+                              ? '${l10n.isLoading} ${((sleepcastProvider.loadingSleepcasts.entries.firstOrNull?.value ?? 0) * 100).toStringAsFixed(0)}%'
+                              : Sleepcasts().getTitle(widget.cast.id),
+                          style: textTheme.titleLarge,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 8),
                       if (isDownloaded)
                         Icon(
                           HugeIcons.strokeRoundedDownload04,
