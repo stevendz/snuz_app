@@ -61,8 +61,8 @@ class SleepcastProvider with ChangeNotifier {
       options: Options(headers: {'auth': 'BLiM8TRxhKC0UGAgr5LY6dnzCyH1zBOf'}),
     );
     final file = File('$_downloadDirectoryPath$path');
-    final format = DateFormat('EEE MMM dd yyyy HH:mm:ss', 'en_US');
-    final DateTime lastModifiedServerUtc = format.parse(resp.headers.map['uploaded']?.first ?? '');
+    final format = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ');
+    final DateTime lastModifiedServerUtc = format.parse(resp.headers.map['x-uploaded-at']?.first ?? '');
     final DateTime l = file.statSync().modified.toUtc();
     final DateTime lastModifiedLocalUtc = DateTime(l.year, l.month, l.day, l.hour, l.minute, l.second);
     return lastModifiedServerUtc.isAfter(lastModifiedLocalUtc);
