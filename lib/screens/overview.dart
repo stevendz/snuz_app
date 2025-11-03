@@ -1,11 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
-import 'package:snuz_app/screens/profile.dart';
 import 'package:snuz_app/utils/snackbar_listener.dart';
 import 'package:snuz_app/widgets/sleepcast_item.dart';
 
@@ -56,7 +56,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                             Text(l10n.goodEvening, style: Theme.of(context).textTheme.headlineLarge),
                             IconButton(
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (c) => const ProfileScreen()));
+                                context.push('/profile');
                               },
                               icon: Icon(
                                 HugeIcons.strokeRoundedUser,

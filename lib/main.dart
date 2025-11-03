@@ -5,14 +5,14 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snuz_app/l10n/app_localizations.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
 import 'package:snuz_app/providers/auth_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
-import 'package:snuz_app/screens/auth_screen.dart';
-import 'package:snuz_app/screens/overview.dart';
+import 'package:snuz_app/router.dart';
 import 'package:wiredash/wiredash.dart';
 
 late AppLocalizations l10n;
@@ -38,8 +38,80 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final GoRouter _router;
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    final authProvider = context.read<AuthProvider>();
+    _router = createRouter(authProvider);
+    _initDeepLinks();
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Check initial link if app was opened from a link
+    try {
+      final initialLink = await _appLinks.getInitialLink();
+      if (initialLink != null && mounted) {
+        _handleIncomingLink(initialLink);
+      }
+    } catch (e) {
+      debugPrint('Failed to get initial link: $e');
+    }
+
+    // Listen for links while app is running
+    _linkSubscription = _appLinks.uriLinkStream.listen(
+      (uri) {
+        if (mounted) {
+          _handleIncomingLink(uri);
+        }
+      },
+      onError: (err) {
+        debugPrint('Failed to get link: $err');
+      },
+    );
+  }
+
+  Future<void> _handleIncomingLink(Uri uri) async {
+    final authProvider = context.read<AuthProvider>();
+
+    // Check if this is a Firebase auth link
+    if (uri.toString().length < 30) {
+      debugPrint('Short URI with no login data');
+      return;
+    }
+
+    final success = await authProvider.signInWithEmailLink(uri.toString());
+
+    if (mounted && !success && authProvider.errorMessage != null) {
+      // The router will automatically redirect to home when auth state changes
+      // Show error if sign-in failed
+      ScaffoldMessenger.of(_router.routerDelegate.navigatorKey.currentContext!).showSnackBar(
+        SnackBar(
+          content: Text(authProvider.errorMessage!),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +130,13 @@ class MyApp extends StatelessWidget {
         secondaryTextOnBackgroundColor: Colors.white70,
         errorColor: const Color(0xFFE53935),
       ),
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Snuz App',
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         theme: theme,
-        home: const AuthWrapper(),
+        routerConfig: _router,
       ),
     );
   }
@@ -75,7 +147,7 @@ final theme = ThemeData(
   useMaterial3: true,
   primaryColor: const Color(0xFF1d223f),
   appBarTheme: AppBarTheme(
-    color: Colors.white.withValues(alpha: 0.9),
+    backgroundColor: Colors.white.withValues(alpha: 0.9),
     iconTheme: IconThemeData(color: Colors.white.withValues(alpha: 0.9)),
   ),
   snackBarTheme: const SnackBarThemeData(
@@ -110,83 +182,3 @@ final theme = ThemeData(
     labelSmall: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.5)),
   ),
 );
-
-class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({super.key});
-
-  @override
-  State<AuthWrapper> createState() => _AuthWrapperState();
-}
-
-class _AuthWrapperState extends State<AuthWrapper> {
-  late AppLinks _appLinks;
-  StreamSubscription<Uri>? _linkSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _initDeepLinks();
-  }
-
-  @override
-  void dispose() {
-    _linkSubscription?.cancel();
-    super.dispose();
-  }
-
-  Future<void> _initDeepLinks() async {
-    _appLinks = AppLinks();
-
-    // Check initial link if app was opened from a link
-    try {
-      final initialLink = await _appLinks.getInitialLink();
-      if (initialLink != null && mounted) {
-        _handleIncomingLink(initialLink);
-      }
-    } catch (e) {
-      // Handle error
-      debugPrint('Failed to get initial link: $e');
-    }
-
-    // Listen for links while app is running
-    _linkSubscription = _appLinks.uriLinkStream.listen(
-      (uri) {
-        if (mounted) {
-          _handleIncomingLink(uri);
-        }
-      },
-      onError: (err) {
-        debugPrint('Failed to get link: $err');
-      },
-    );
-  }
-
-  Future<void> _handleIncomingLink(Uri uri) async {
-    final authProvider = context.read<AuthProvider>();
-    if (uri.toString().length < 30) {
-      print('short uri with no login data');
-      return;
-    }
-    final success = await authProvider.signInWithEmailLink(uri.toString());
-
-    if (mounted && !success && authProvider.errorMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authProvider.errorMessage!),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthProvider>();
-
-    if (authProvider.isAuthenticated) {
-      return const OverviewScreen();
-    } else {
-      return const AuthScreen();
-    }
-  }
-}

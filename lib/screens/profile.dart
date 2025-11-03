@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:snuz_app/l10n/app_localizations.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
@@ -7,7 +8,6 @@ import 'package:snuz_app/main.dart';
 import 'package:snuz_app/providers/auth_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
 import 'package:snuz_app/providers/snackbar_service.dart';
-import 'package:snuz_app/screens/overview.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
 import 'package:snuz_app/utils/snackbar_data.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -61,11 +61,7 @@ class ProfileScreen extends StatelessWidget {
 
                         if (shouldLogout == true && context.mounted) {
                           await context.read<AuthProvider>().signOut();
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AuthWrapper()),
-                            (route) => false,
-                          );
+                          // Router will automatically redirect to /auth
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -100,11 +96,7 @@ class ProfileScreen extends StatelessWidget {
                         onSelected: (locale) async {
                           l10n = await AppLocalizations.delegate.load(locale!);
                           if (!context.mounted) return;
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const OverviewScreen()),
-                            (route) => false,
-                          );
+                          context.go('/');
                         },
                       );
                     },
