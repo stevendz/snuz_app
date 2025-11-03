@@ -373,6 +373,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @sendSignInLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Sign-In Link'**
+  String get sendSignInLink;
+
+  /// No description provided for @emailLinkSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email!'**
+  String get emailLinkSent;
+
+  /// No description provided for @emailLinkSentDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent you a sign-in link. Click the link in your email to continue.'**
+  String get emailLinkSentDescription;
+
+  /// No description provided for @enterEmailToContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email to get started'**
+  String get enterEmailToContinue;
+
+  /// No description provided for @resendLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Link'**
+  String get resendLink;
+
+  /// No description provided for @backToEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Email'**
+  String get backToEmail;
 }
 
 class _AppLocalizationsDelegate

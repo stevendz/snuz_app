@@ -44,5 +44,11 @@
     "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
     "logout": "Abmelden",
     "logoutConfirmation": "Möchten Sie sich wirklich abmelden?",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "sendSignInLink": "Anmeldelink senden",
+    "emailLinkSent": "Prüfen Sie Ihre E-Mails!",
+    "emailLinkSentDescription": "Wir haben Ihnen einen Anmeldelink gesendet. Klicken Sie auf den Link in Ihrer E-Mail, um fortzufahren.",
+    "enterEmailToContinue": "Geben Sie Ihre E-Mail ein, um zu beginnen",
+    "resendLink": "Link erneut senden",
+    "backToEmail": "Zurück zur E-Mail"
 }

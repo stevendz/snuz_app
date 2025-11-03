@@ -149,4 +149,24 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get cancel => 'Abbrechen';
+
+  @override
+  String get sendSignInLink => 'Anmeldelink senden';
+
+  @override
+  String get emailLinkSent => 'Prüfen Sie Ihre E-Mails!';
+
+  @override
+  String get emailLinkSentDescription =>
+      'Wir haben Ihnen einen Anmeldelink gesendet. Klicken Sie auf den Link in Ihrer E-Mail, um fortzufahren.';
+
+  @override
+  String get enterEmailToContinue =>
+      'Geben Sie Ihre E-Mail ein, um zu beginnen';
+
+  @override
+  String get resendLink => 'Link erneut senden';
+
+  @override
+  String get backToEmail => 'Zurück zur E-Mail';
 }

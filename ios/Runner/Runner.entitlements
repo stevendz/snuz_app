@@ -4,5 +4,14 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:snuz.app</string>
+		<string>applinks:www.snuz.app</string>
+		<string>applinks:snuz.app?mode=developer
+
+
+applinks:snuz.app?mode=developer</string>
+	</array>
 </dict>
 </plist>

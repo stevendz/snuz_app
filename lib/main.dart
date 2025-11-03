@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -108,8 +111,73 @@ final theme = ThemeData(
   ),
 );
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinks();
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Check initial link if app was opened from a link
+    try {
+      final initialLink = await _appLinks.getInitialLink();
+      if (initialLink != null && mounted) {
+        _handleIncomingLink(initialLink);
+      }
+    } catch (e) {
+      // Handle error
+      debugPrint('Failed to get initial link: $e');
+    }
+
+    // Listen for links while app is running
+    _linkSubscription = _appLinks.uriLinkStream.listen(
+      (uri) {
+        if (mounted) {
+          _handleIncomingLink(uri);
+        }
+      },
+      onError: (err) {
+        debugPrint('Failed to get link: $err');
+      },
+    );
+  }
+
+  Future<void> _handleIncomingLink(Uri uri) async {
+    final authProvider = context.read<AuthProvider>();
+    if (uri.toString().length < 30) {
+      print('short uri with no login data');
+      return;
+    }
+    final success = await authProvider.signInWithEmailLink(uri.toString());
+
+    if (mounted && !success && authProvider.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(authProvider.errorMessage!),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

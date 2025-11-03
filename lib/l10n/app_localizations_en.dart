@@ -146,4 +146,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get sendSignInLink => 'Send Sign-In Link';
+
+  @override
+  String get emailLinkSent => 'Check your email!';
+
+  @override
+  String get emailLinkSentDescription =>
+      'We\'ve sent you a sign-in link. Click the link in your email to continue.';
+
+  @override
+  String get enterEmailToContinue => 'Enter your email to get started';
+
+  @override
+  String get resendLink => 'Resend Link';
+
+  @override
+  String get backToEmail => 'Back to Email';
 }

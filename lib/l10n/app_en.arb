@@ -44,5 +44,11 @@
     "unexpectedError": "An unexpected error occurred",
     "logout": "Logout",
     "logoutConfirmation": "Are you sure you want to logout?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "sendSignInLink": "Send Sign-In Link",
+    "emailLinkSent": "Check your email!",
+    "emailLinkSentDescription": "We've sent you a sign-in link. Click the link in your email to continue.",
+    "enterEmailToContinue": "Enter your email to get started",
+    "resendLink": "Resend Link",
+    "backToEmail": "Back to Email"
 }
