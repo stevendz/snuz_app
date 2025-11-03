@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snuz_app/l10n/app_localizations.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
+import 'package:snuz_app/providers/auth_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
+import 'package:snuz_app/screens/auth_screen.dart';
 import 'package:snuz_app/screens/overview.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -24,6 +26,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => SleepcastProvider()..init()),
         ChangeNotifierProvider(create: (_) => AudioPlayerProvider()),
       ],
@@ -58,7 +61,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         theme: theme,
-        home: const OverviewScreen(),
+        home: const AuthWrapper(),
       ),
     );
   }
@@ -84,6 +87,11 @@ final theme = ThemeData(
       side: WidgetStateProperty.all(BorderSide(color: Colors.white.withValues(alpha: 0.2))),
     ),
   ),
+  dialogTheme: DialogThemeData(
+    backgroundColor: const Color(0xFF1d223f),
+    titleTextStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+    contentTextStyle: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.9)),
+  ),
   textTheme: TextTheme(
     headlineLarge: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
     headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white.withValues(alpha: 0.9)),
@@ -99,3 +107,18 @@ final theme = ThemeData(
     labelSmall: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.5)),
   ),
 );
+
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
+    if (authProvider.isAuthenticated) {
+      return const OverviewScreen();
+    } else {
+      return const AuthScreen();
+    }
+  }
+}
