@@ -20,6 +20,8 @@ class SleepcastProvider with ChangeNotifier {
   List<Sleepcast> get sleepcastStory => _sleepcastStory;
   List<Sleepcast> get sleepcastSOS => _sleepcastSOS;
 
+  bool get isAnySleepcastDownloaded => Directory('$_downloadDirectoryPath/sleepcasts/').existsSync();
+
   Map<Sleepcast, double> loadingSleepcasts = {};
 
   Future<void> init() async {

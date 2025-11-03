@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snuz_app/l10n/app_localizations.dart';
 import 'package:snuz_app/providers/audio_player_provider.dart';
 import 'package:snuz_app/providers/auth_provider.dart';
+import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
 import 'package:snuz_app/router.dart';
 import 'package:wiredash/wiredash.dart';
@@ -21,10 +21,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AssetsAudioPlayer.setupNotificationsOpenAction((notification) => true);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  final prefs = await SharedPreferences.getInstance();
-  final locale = prefs.getString('locale') ?? 'en';
-  l10n = await AppLocalizations.delegate.load(Locale(locale));
+
   await Firebase.initializeApp();
+
+  // Initialize locale provider
+  final localeProvider = await LocaleProvider.initialize();
 
   runApp(
     MultiProvider(
@@ -32,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => SleepcastProvider()..init()),
         ChangeNotifierProvider(create: (_) => AudioPlayerProvider()),
+        ChangeNotifierProvider.value(value: localeProvider),
       ],
       child: const MyApp(),
     ),
@@ -115,10 +117,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final localeProvider = context.watch<LocaleProvider>();
+
     return Wiredash(
       projectId: 'snuz-rq0jtyj',
       secret: 'w1cLKfgf1nA2Ron-RgAt3ZHUnINfrKMU',
-      options: const WiredashOptionsData(locale: Locale('de')),
+      options: WiredashOptionsData(locale: localeProvider.locale),
       theme: WiredashThemeData(
         primaryColor: const Color(0xFF1D223F),
         secondaryColor: const Color(0xFF2C354F),
@@ -133,6 +137,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp.router(
         title: 'Snuz App',
         debugShowCheckedModeBanner: false,
+        locale: localeProvider.locale,
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         theme: theme,

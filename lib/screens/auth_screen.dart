@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snuz_app/l10n/app_localizations.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/providers/auth_provider.dart';
+import 'package:snuz_app/providers/locale_provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -131,8 +131,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 DropdownMenuEntry(value: const Locale('de', ''), label: l10n.german),
               ],
               onSelected: (locale) async {
-                l10n = await AppLocalizations.delegate.load(locale!);
-                setState(() {});
+                if (locale != null && mounted) {
+                  await context.read<LocaleProvider>().setLocale(locale);
+                }
               },
             );
           },

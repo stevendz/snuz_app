@@ -98,17 +98,53 @@ abstract class AppLocalizations {
     Locale('en')
   ];
 
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? '**
+  String get alreadyHaveAccount;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
   /// **'Snuz App'**
   String get appTitle;
 
+  /// No description provided for @backToEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Email'**
+  String get backToEmail;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get dontHaveAccount;
+
   /// No description provided for @downloadedMeditations.
   ///
   /// In en, this message translates to:
   /// **'Downloaded Meditations'**
   String get downloadedMeditations;
+
+  /// No description provided for @downloadedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded successfully!'**
+  String get downloadedSuccessfully;
 
   /// No description provided for @downloads.
   ///
@@ -122,263 +158,17 @@ abstract class AppLocalizations {
   /// **'what dream journey would you like to embark on today?'**
   String get dreamJourneyQuestion;
 
-  /// No description provided for @english.
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get english;
-
-  /// No description provided for @german.
-  ///
-  /// In en, this message translates to:
-  /// **'German'**
-  String get german;
-
-  /// No description provided for @goodEvening.
-  ///
-  /// In en, this message translates to:
-  /// **'Good evening,'**
-  String get goodEvening;
-
-  /// No description provided for @isLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Is loading...'**
-  String get isLoading;
-
-  /// No description provided for @language.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
-
-  /// No description provided for @profile.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile'**
-  String get profile;
-
-  /// No description provided for @sleepcasts.
-  ///
-  /// In en, this message translates to:
-  /// **'Sleepcasts'**
-  String get sleepcasts;
-
-  /// No description provided for @sos.
-  ///
-  /// In en, this message translates to:
-  /// **'SOS'**
-  String get sos;
-
-  /// No description provided for @errorTryAgainLater.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred. Please try again later.'**
-  String get errorTryAgainLater;
-
-  /// No description provided for @noInternetWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'No internet connection available.'**
-  String get noInternetWarning;
-
-  /// No description provided for @downloadedSuccessfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloaded successfully!'**
-  String get downloadedSuccessfully;
-
-  /// No description provided for @featureRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'Feature Request'**
-  String get featureRequest;
-
-  /// No description provided for @submitFeatureRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'Submit Feature Request'**
-  String get submitFeatureRequest;
-
-  /// No description provided for @sleepAndMeditation.
-  ///
-  /// In en, this message translates to:
-  /// **'Sleep & Meditation'**
-  String get sleepAndMeditation;
-
-  /// No description provided for @welcomeBack.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome back!'**
-  String get welcomeBack;
-
-  /// No description provided for @joinSnuz.
-  ///
-  /// In en, this message translates to:
-  /// **'Join Snuz'**
-  String get joinSnuz;
-
-  /// No description provided for @freeForever.
-  ///
-  /// In en, this message translates to:
-  /// **'This app is free forever'**
-  String get freeForever;
-
   /// No description provided for @email.
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get email;
 
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
-  /// No description provided for @confirmPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm Password'**
-  String get confirmPassword;
-
-  /// No description provided for @signIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
-  String get signIn;
-
-  /// No description provided for @signUp.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign Up'**
-  String get signUp;
-
-  /// No description provided for @dontHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account? '**
-  String get dontHaveAccount;
-
-  /// No description provided for @alreadyHaveAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have an account? '**
-  String get alreadyHaveAccount;
-
-  /// No description provided for @pleaseEnterEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your email'**
-  String get pleaseEnterEmail;
-
-  /// No description provided for @pleaseEnterValidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email'**
-  String get pleaseEnterValidEmail;
-
-  /// No description provided for @pleaseEnterPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your password'**
-  String get pleaseEnterPassword;
-
-  /// No description provided for @passwordTooShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Password must be at least 6 characters'**
-  String get passwordTooShort;
-
-  /// No description provided for @pleaseConfirmPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Please confirm your password'**
-  String get pleaseConfirmPassword;
-
-  /// No description provided for @passwordsDoNotMatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Passwords do not match'**
-  String get passwordsDoNotMatch;
-
-  /// No description provided for @userNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'No user found with this email'**
-  String get userNotFound;
-
-  /// No description provided for @wrongPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Wrong password'**
-  String get wrongPassword;
-
-  /// No description provided for @invalidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid email address'**
-  String get invalidEmail;
-
-  /// No description provided for @userDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'This user account has been disabled'**
-  String get userDisabled;
-
   /// No description provided for @emailAlreadyInUse.
   ///
   /// In en, this message translates to:
   /// **'An account already exists with this email'**
   String get emailAlreadyInUse;
-
-  /// No description provided for @weakPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Password is too weak'**
-  String get weakPassword;
-
-  /// No description provided for @operationNotAllowed.
-  ///
-  /// In en, this message translates to:
-  /// **'Email/password accounts are not enabled'**
-  String get operationNotAllowed;
-
-  /// No description provided for @invalidCredential.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid email or password'**
-  String get invalidCredential;
-
-  /// No description provided for @unexpectedError.
-  ///
-  /// In en, this message translates to:
-  /// **'An unexpected error occurred'**
-  String get unexpectedError;
-
-  /// No description provided for @logout.
-  ///
-  /// In en, this message translates to:
-  /// **'Logout'**
-  String get logout;
-
-  /// No description provided for @logoutConfirmation.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to logout?'**
-  String get logoutConfirmation;
-
-  /// No description provided for @cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
-
-  /// No description provided for @sendSignInLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Sign-In Link'**
-  String get sendSignInLink;
 
   /// No description provided for @emailLinkSent.
   ///
@@ -392,11 +182,155 @@ abstract class AppLocalizations {
   /// **'We\'ve sent you a sign-in link. Click the link in your email to continue.'**
   String get emailLinkSentDescription;
 
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
   /// No description provided for @enterEmailToContinue.
   ///
   /// In en, this message translates to:
   /// **'Enter your email to get started'**
   String get enterEmailToContinue;
+
+  /// No description provided for @errorTryAgainLater.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please try again later.'**
+  String get errorTryAgainLater;
+
+  /// No description provided for @featureRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature Request'**
+  String get featureRequest;
+
+  /// No description provided for @freeForever.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is free forever'**
+  String get freeForever;
+
+  /// No description provided for @german.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get german;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening,'**
+  String get goodEvening;
+
+  /// No description provided for @invalidCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get invalidCredential;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email address'**
+  String get invalidEmail;
+
+  /// No description provided for @isLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Is loading...'**
+  String get isLoading;
+
+  /// No description provided for @joinSnuz.
+  ///
+  /// In en, this message translates to:
+  /// **'Join Snuz'**
+  String get joinSnuz;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirmation;
+
+  /// No description provided for @noDownloadsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t downloaded any meditations yet. Download meditations to listen offline.'**
+  String get noDownloadsYet;
+
+  /// No description provided for @noInternetWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection available.'**
+  String get noInternetWarning;
+
+  /// No description provided for @operationNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Email/password accounts are not enabled'**
+  String get operationNotAllowed;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get passwordTooShort;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @pleaseConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get pleaseConfirmPassword;
+
+  /// No description provided for @pleaseEnterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get pleaseEnterEmail;
+
+  /// No description provided for @pleaseEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get pleaseEnterPassword;
+
+  /// No description provided for @pleaseEnterValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get pleaseEnterValidEmail;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
 
   /// No description provided for @resendLink.
   ///
@@ -404,11 +338,83 @@ abstract class AppLocalizations {
   /// **'Resend Link'**
   String get resendLink;
 
-  /// No description provided for @backToEmail.
+  /// No description provided for @sendSignInLink.
   ///
   /// In en, this message translates to:
-  /// **'Back to Email'**
-  String get backToEmail;
+  /// **'Send Sign-In Link'**
+  String get sendSignInLink;
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
+
+  /// No description provided for @sleepAndMeditation.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep & Meditation'**
+  String get sleepAndMeditation;
+
+  /// No description provided for @sleepcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleepcasts'**
+  String get sleepcasts;
+
+  /// No description provided for @sos.
+  ///
+  /// In en, this message translates to:
+  /// **'SOS'**
+  String get sos;
+
+  /// No description provided for @submitFeatureRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Feature Request'**
+  String get submitFeatureRequest;
+
+  /// No description provided for @unexpectedError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get unexpectedError;
+
+  /// No description provided for @userDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This user account has been disabled'**
+  String get userDisabled;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No user found with this email'**
+  String get userNotFound;
+
+  /// No description provided for @weakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak'**
+  String get weakPassword;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back!'**
+  String get welcomeBack;
+
+  /// No description provided for @wrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong password'**
+  String get wrongPassword;
 }
 
 class _AppLocalizationsDelegate

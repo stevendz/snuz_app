@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:snuz_app/l10n/app_localizations.dart';
 import 'package:snuz_app/l10n/sleepcast_descriptions.dart';
 import 'package:snuz_app/main.dart';
 import 'package:snuz_app/providers/auth_provider.dart';
+import 'package:snuz_app/providers/locale_provider.dart';
 import 'package:snuz_app/providers/sleepcast_provider.dart';
 import 'package:snuz_app/providers/snackbar_service.dart';
 import 'package:snuz_app/screens/sleepcast_player_screen.dart';
@@ -34,54 +33,39 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(l10n.logout, style: Theme.of(context).textTheme.headlineMedium),
+                  Text(l10n.downloadedMeditations, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final shouldLogout = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(l10n.logout),
-                            content: Text(l10n.logoutConfirmation),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: Text(l10n.cancel),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: Text(l10n.logout),
-                              ),
-                            ],
+                  if (!castProvider.isAnySleepcastDownloaded)
+                    Text(
+                      l10n.noDownloadsYet,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )
+                  else
+                    for (final cast in [...castProvider.sleepcastSOS, ...castProvider.sleepcastStory])
+                      if (castProvider.isDownloaded(cast.id))
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(
+                            Icons.download_done_rounded,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                            size: 20,
                           ),
-                        );
-
-                        if (shouldLogout == true && context.mounted) {
-                          await context.read<AuthProvider>().signOut();
-                          // Router will automatically redirect to /auth
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFB63B45),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          title: Text(
+                            Sleepcasts().getTitle(cast.id),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(cast: cast)),
+                            );
+                          },
+                          trailing: IconButton(
+                            onPressed: () => castProvider.deleteDownloadedSleepcast(cast),
+                            icon: const Icon(Icons.delete, color: Color(0xffb63b45), size: 20),
+                          ),
                         ),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        l10n.logout,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   Text(l10n.language, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 8),
                   LayoutBuilder(
@@ -94,40 +78,13 @@ class ProfileScreen extends StatelessWidget {
                           DropdownMenuEntry(value: const Locale('de', ''), label: l10n.german),
                         ],
                         onSelected: (locale) async {
-                          l10n = await AppLocalizations.delegate.load(locale!);
-                          if (!context.mounted) return;
-                          context.go('/');
+                          if (locale != null && context.mounted) {
+                            await context.read<LocaleProvider>().setLocale(locale);
+                          }
                         },
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
-                  Text(l10n.downloadedMeditations, style: Theme.of(context).textTheme.headlineMedium),
-                  const SizedBox(height: 8),
-                  for (final cast in [...castProvider.sleepcastSOS, ...castProvider.sleepcastStory])
-                    if (castProvider.isDownloaded(cast.id))
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: Icon(
-                          Icons.download_done_rounded,
-                          color: Theme.of(context).textTheme.bodyMedium?.color,
-                          size: 20,
-                        ),
-                        title: Text(
-                          Sleepcasts().getTitle(cast.id),
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SleepcastPlayerScreen(cast: cast)),
-                          );
-                        },
-                        trailing: IconButton(
-                          onPressed: () => castProvider.deleteDownloadedSleepcast(cast),
-                          icon: const Icon(Icons.delete, color: Color(0xffb63b45), size: 20),
-                        ),
-                      ),
                   const SizedBox(height: 16),
                   Text(l10n.featureRequest, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 8),
@@ -145,6 +102,41 @@ class ProfileScreen extends StatelessWidget {
                           ),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  Text(l10n.logout, style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () async {
+                      final shouldLogout = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(l10n.logout),
+                          content: Text(l10n.logoutConfirmation),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text(l10n.cancel),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text(l10n.logout),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (shouldLogout == true && context.mounted) {
+                        await context.read<AuthProvider>().signOut();
+                        // Router will automatically redirect to /auth
+                      }
+                    },
+                    child: Text(
+                      l10n.logout,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
+                          ),
+                    ),
+                  ),
                   Visibility(
                     // ignore: avoid_redundant_argument_values
                     visible: kDebugMode,
@@ -152,7 +144,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 16),
-                        Text('Develper Section', style: Theme.of(context).textTheme.headlineMedium),
+                        Text('Developer Section', style: Theme.of(context).textTheme.headlineMedium),
                         const SizedBox(height: 8),
                         TextButton(
                           onPressed: () {
