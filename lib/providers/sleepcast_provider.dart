@@ -118,13 +118,13 @@ class SleepcastProvider with ChangeNotifier {
   Future<void> _initializeDummyData() async {
     _sleepcastStory.addAll([
       Sleepcast(id: 'cast_1', duration: const Duration(minutes: 25), locale: ['de']),
-      Sleepcast(id: 'cast_2', duration: const Duration(minutes: 30), locale: ['de']),
+      // Sleepcast(id: 'cast_2', duration: const Duration(minutes: 30), locale: ['de']),
     ]);
 
     _sleepcastSOS.addAll([
       Sleepcast(id: 'sos_1', duration: const Duration(minutes: 10), locale: ['de']),
       Sleepcast(id: 'sos_2', duration: const Duration(minutes: 10), locale: ['de']),
-      Sleepcast(id: 'sos_3', duration: const Duration(minutes: 10), locale: ['de']),
+      // Sleepcast(id: 'sos_3', duration: const Duration(minutes: 10), locale: ['de']),
     ]);
 
     notifyListeners();
