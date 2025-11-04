@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +25,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   await Firebase.initializeApp();
+
+  await FirebaseAppCheck.instance.activate();
 
   // Initialize locale provider
   final localeProvider = await LocaleProvider.initialize();

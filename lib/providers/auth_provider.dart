@@ -1,3 +1,5 @@
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +7,7 @@ import 'package:snuz_app/main.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFunctions _functions = FirebaseFunctions.instanceFor(region: 'europe-west3');
   User? _user;
   bool _isLoading = false;
   String? _errorMessage;
@@ -34,19 +37,9 @@ class AuthProvider with ChangeNotifier {
       _emailLinkSent = false;
       notifyListeners();
 
-      final actionCodeSettings = ActionCodeSettings(
-        url: 'https://snuz.app',
-        handleCodeInApp: true,
-        androidPackageName: 'app.snuz.mobile',
-        androidInstallApp: true,
-        androidMinimumVersion: '21',
-        iOSBundleId: 'app.snuz.webrabbits',
-      );
-
-      await _auth.sendSignInLinkToEmail(
-        email: email.trim(),
-        actionCodeSettings: actionCodeSettings,
-      );
+      // Call the Cloud Function to send the login email
+      final callable = _functions.httpsCallable('sendLoginEmail');
+      await callable.call(<String, dynamic>{'email': email.trim()});
 
       // Store email for later use when handling the link
       final prefs = await SharedPreferences.getInstance();
@@ -56,9 +49,9 @@ class AuthProvider with ChangeNotifier {
       _emailLinkSent = true;
       notifyListeners();
       return true;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseFunctionsException catch (e) {
       _isLoading = false;
-      _errorMessage = _getErrorMessage(e);
+      _errorMessage = e.message ?? l10n.unexpectedError;
       notifyListeners();
       return false;
     } catch (e) {

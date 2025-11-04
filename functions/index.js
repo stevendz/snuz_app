@@ -11,8 +11,20 @@ const mailgunApiKey = defineString("MAILGUN_API_KEY");
 const mailgunDomain = defineString("MAILGUN_DOMAIN");
 
 exports.sendLoginEmail = onCall(
-    {region: "europe-west3"},
+    {
+      region: "europe-west3",
+      // App Check erzwingen
+      consumeAppCheckToken: true,
+    },
     async (request) => {
+      // Optional: Prüfen ob App Check Token gültig ist
+      if (request.app === undefined) {
+        throw new HttpsError(
+            "failed-precondition",
+            "App Check Token fehlt oder ist ungültig",
+        );
+      }
+
       const {email} = request.data;
 
       if (!email || !email.includes("@")) {
